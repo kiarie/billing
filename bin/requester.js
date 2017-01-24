@@ -1,0 +1,173 @@
+var http = require('https');
+var querystring = require('querystring');
+var options = function(routepath){
+    return {
+        host:'api.ipayafrica.com',
+        path:routepath,
+        headers: {
+        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOlsiYXBpLmlwYXlhZnJpY2EuY29tIl0sImp0aSI6NTExODk2MjAxLCJpYXQiOjE0Njg5OTgwMzAsIm5iZiI6MTQ2ODk5ODMzMCwiZXhwIjoxNzI4MTk4MDMwLCJkYXRhIjp7InNjb3BlIjoiYWxsIiwiYWdlbnQiOiJCSUxMSU5HIn19.x7CKICoZ8AbQw0fP9PrAV9rqQaQKOMotCwcGWHTVeIo'
+        }
+    };
+};
+var post_options = function(routepath, postData){
+    return {
+        method: 'post',
+        host:'api.ipayafrica.com',
+        path:routepath,
+        headers: {
+        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOlsiYXBpLmlwYXlhZnJpY2EuY29tIl0sImp0aSI6NTExODk2MjAxLCJpYXQiOjE0Njg5OTgwMzAsIm5iZiI6MTQ2ODk5ODMzMCwiZXhwIjoxNzI4MTk4MDMwLCJkYXRhIjp7InNjb3BlIjoiYWxsIiwiYWdlbnQiOiJCSUxMSU5HIn19.x7CKICoZ8AbQw0fP9PrAV9rqQaQKOMotCwcGWHTVeIo',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(postData)
+        }
+    };
+};
+var post_option = function(routepath, postData, headerz, host){
+    headerz['Content-Type'] = 'application/x-www-form-urlencoded';
+    headerz['Content-Length']= Buffer.byteLength(postData);
+    return {
+        method: 'post',
+        host:host,
+        path:routepath,
+        headers: headerz
+    };
+};
+module.exports = {
+    lists: function(callback) {
+        //this is the request that fetches the list of billing categories
+        var req = http.get(options('/billing/v2/list'), function(res) {
+            var str ='';
+            res.on('data', function (chunk){
+                str += chunk;                        
+            });
+            res.on('end', function(){
+                //    console.log(res.statusCode, str);
+                   callback(JSON.parse(str), res.statusCode);//the callback function to return data
+            });
+        });
+        req.on('error', function(e){
+            console.log('Problem with request: ${e.message}'+e.message);
+            callback(JSON.parse(JSON.stringify({error: e.message})), 500);
+        });
+        req.end();
+    },
+    clist: function(category, callback) {
+        var req = http.get(options('/billing/v2/list/'+category), function(res) {
+            var str ='';
+            res.on('data', function (chunk){
+                str += chunk;                        
+            });
+            res.on('end', function(){
+                   console.log(res.statusCode, str);
+                   callback(JSON.parse(str), res.statusCode);
+            });
+        });
+        req.on('error', function(e){
+            console.log('Problem with request: ${e.message}'+e.message);
+                        callback(JSON.parse(JSON.stringify({error: e.message})), 500);
+        });
+        req.end();
+    },
+    paylist:function(category, formData, hash, callback){
+        var postd = querystring.stringify({
+            
+            'amount':formData.amount,
+            'biller_name':formData.biller,
+            'phone':formData.phone,
+            'account':formData.account,
+            'vid':formData.vid,
+            'hash' : hash
+        });
+        var req = http.request(post_options('/billing/v2/pay/'+category, postd), function (res) {
+            var str = '';
+            res.on('data', function(chunk){
+                str+=chunk;
+                console.log('recieving');
+            });
+            res.on('end', function(){
+                   console.log(res.statusCode, str);
+                   callback(JSON.parse(str), res.statusCode);
+            });
+          });
+         req.on('error', function(e){
+             callback(JSON.parse(JSON.stringify({error:e.message})), 500);
+         });
+         req.write(postd);
+         req.end();
+    },
+    ipayrest:function(formData, url,  callback){
+        var parsees = querystring.stringify(formData);
+        var req = http.request(post_options(url, parsees), function (res) {
+            var str = '';
+            res.on('data', function(chunk){
+                str+=chunk;
+                console.log('recieving');
+            });
+            res.on('end', function(){
+                   console.log(res.statusCode, str);
+                   callback(JSON.parse(str), res.statusCode);
+            });
+          });
+         req.on('error', function(e){
+             callback(JSON.parse(JSON.stringify({error:e.message})), 500);
+         });
+         req.write(parsees);
+         req.end();
+
+    },
+    ipayresttest:function(formData, url){
+        var parsees = querystring.stringify(formData);
+        return new Promise(function (resolve, reject) {
+            var req = http.request(post_options(url, parsees), function (res) {
+            var str = '';
+            res.on('data', function(chunk){
+                str+=chunk;
+                console.log('recieving'); console.log(str)
+            });
+            res.on('end', function(){
+                if(res.statusCode === 200){
+                   resolve(JSON.parse(str));
+                }
+                reject(JSON.parse(str));
+            });
+          });
+         req.on('error', function(e){
+             reject(JSON.parse(JSON.stringify({error:e.message})));
+         });
+         req.write(parsees);
+         req.end(); 
+        })
+       
+
+    },
+     $http:function(formData, url, host, headers){
+        var formdata = querystring.stringify(formData);
+        
+        return new Promise(function (resolve, reject) {
+            var req = http.request(post_option(url, formdata, headers, host), function (res) {
+            var str = '';
+            res.on('data', function(chunk){
+                str+=chunk;
+                console.log('recieving');
+                 console.log(str)
+                 console.log(headers)
+            });
+            res.on('end', function(){
+                if(res.statusCode === 200){
+                   resolve(JSON.parse(str));
+                }
+                reject(JSON.parse(str));
+            });
+          });
+         req.on('error', function(e){
+             reject(JSON.parse(JSON.stringify({error:e.message})));
+         });
+         req.write(formdata);
+        
+         req.end(); 
+        })
+       
+
+    }
+    
+    
+};
