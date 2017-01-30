@@ -1,0 +1,33 @@
+{ header_status: 200,
+  status: 1,
+  data: 
+   { sid: 'faea6add-dd62-4671-8814-87a8ef419040',
+     oid: '54',
+     amount: '900',
+     account: 'CT685545',
+     payment_channels: [ [Object], [Object] ],
+     hash: 'aa9346674339de259e243ade5a1fb6a26d44e745e4bb61b3e60da156c52c6b9a',
+     biller: undefined } }
+---------------------------------------------------------
+Responses
+----------------------------------------------------------
+{ txncd: '',
+  qwh: '',
+  afd: '',
+  poi: '',
+  uyt: '',
+  ifd: '',
+  agt: '',
+  id: '',
+  status: 'bdi6p2yy76etrs',
+  ivm: '',
+  mc: '0',
+  p1: '',
+  p2: '',
+  p3: '',
+  p4: '',
+  msisdn_id: 'First Second',
+  msisdn_idnum: '',
+  msisdn_custnum: '',
+  channel: 'Credit_Card' }
+s

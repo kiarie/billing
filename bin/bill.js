@@ -5,10 +5,14 @@ var querystring = require('querystring');
 
 module.exports ={
     paybill: function(data){
-        var datastring = data.account+data.amount+data.biller_name+data.phone+data.vid;
-        querystring.stringify(datastring);
+        var datastring = {};
+        /*Object keys to get an Array for the keys then we sort and iterate the datastring object
+        * with the map function and put values in the sorted order */ 
+        Object.keys(data).sort().map((k) =>{
+            datastring[k] = data[k]; 
+        });
         var key = 'demo';      
-        data.hash = hash.hash_hmac(datastring, 'sha256', key);
+        data.hash = hash.hash_hmac(querystring.stringify(datastring), 'sha256', key);
         return data;         
     },
     hash_hmac: function (data, algo) {
@@ -31,7 +35,7 @@ module.exports ={
       data.p4 = data.amount;
       data.cbk = 'localhost:3000/';
       data.cst = '1';
-      data.crl = '0';
+      data.crl = '2';
       var hash = require('./hash.js'); //generate hash
       delete data.account;
       var key = 'demo';
@@ -55,6 +59,33 @@ module.exports ={
       var hashid = hash.hash_hmac(datastring, 'sha256', key);
       data.hash = hashid;
       return data;
+    },
+    ipn:function (status) {
+        var stat;
+            switch (status) {
+                case 'aei7p7yrx4ae34'://successfull
+                    stat = true
+                    break;
+                case 'bdi6p2yy76etrs'://pending
+                    stat = 'pending'; //for now make true
+                    break;
+                case 'fe2707etr5s4wq'://failed
+                    stat = 'failed';
+                    break;
+                case 'eq3i7p5yt7645e'://more
+                    stat = true;
+                    break;
+                case 'dtfi4p7yty45wq'://less
+                    stat = 'less';
+                    break;
+                case 'cr5i3pgy9867e1'://used
+                    stat = 'used';
+                    break;
+                default:
+                    stat = false;
+                    break;
+            }
+            return stat;
     },
     pusher: function () {
         var Pusher = require('pusher');

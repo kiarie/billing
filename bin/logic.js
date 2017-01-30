@@ -12,7 +12,7 @@ module.exports = {
      var connection = mysql.createConnection(configs);
         return connection; 
     },
-    query:function(connection, fields) {
+    insertquery:function(connection, fields) {
         var filtered = fields;
         filtered.telephone = filtered.tel;
         filtered.email = filtered.eml;
@@ -30,6 +30,16 @@ module.exports = {
             });  
         });
         
+    },
+    selectquery:function(connection, fields) {
+        return new Promise(function(resolve, reject){
+            connection.query('SELECT amount, telephone as tel, account, biller,category, email as eml WHERE id LIKE = ?',[fields], function(err, result){
+                if(err) reject(err);
+                
+                resolve(result)
+                connection.end();
+            })
+        })
     },
     connectionend:function (connection) {
         connection.end();        

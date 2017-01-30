@@ -13,31 +13,49 @@ var requester = require('./bin/requester');
 const templateUrl = /([^/]*)(\/|\/index.html)$/;
 app.get('/partial/:name', function(req, res) {
   var partial = req.params.name;
-  var path = req.path;
-  var files; 
+  var files;
+  var f; //this will be the file
   
 //   console.log(partial);
   var compare = partial === 'contact' || partial ==='buy' || partial ==='properties' || partial === 'payments';
         
     if(compare) {
-    files = [fs.readFile(`../html/billing/${partial}.html`)];
+    files = fs.readFile(`../html/billing/${partial}.html`);
     }else{
-        files = [fs.readFile(`../html/billing/home.html`)];
+        files = fs.readFile(`../html/billing/utils.html`);
+        // files = fs.readFile(`../html/billing/home.html`);
     }
+    files.
+    then(file => f = file.toString('utf-8')).    
+    then(file => {
+       return requester.$get('/billing/v2/list/'+partial)
+    }).
+    then(data => {
+    return handlebars.compile(f)({categories : data.data, name : partial})
+    }).
+    then(tpl => {
+        // const content = files.join('');
+        res.set({
+    //   'ETag': hash,
+        'Cache-Control': 'public, no-cache'
+        });
+        res.send(tpl);
+    })
+    .catch(error => res.status(500).send(error.toString()));
+  });  
+//   Promise.all(files).
+//   then(files => files.map(f => f.toString('utf-8'))).
+//   then(files => {
+//       const content = files.join('');
+//        res.set({
+//   //   'ETag': hash,
+//       'Cache-Control': 'public, no-cache'
+//     });
+//     res.send(content);
+//   })
+//   .catch(error => res.status(500).send(error.toString()));
     
-  Promise.all(files).
-  then(files => files.map(f => f.toString('utf-8'))).
-  then(files => {
-      const content = files.join('');
-       res.set({
-  //   'ETag': hash,
-      'Cache-Control': 'public, no-cache'
-    });
-    res.send(content);
-  })
-  .catch(error => res.status(500).send(error.toString()));
-    
-});
+// });
 /*
 
       files = [
