@@ -194,6 +194,28 @@ module.exports = {
          });
          req.end(); 
         });
+    },
+        _get:function(url){
+        return new Promise(function (resolve, reject) {
+            var req = http.get(options(url), function (res) {
+            var str = '';
+            res.on('data', function(chunk){
+                str+=chunk;
+                console.log('recieving');
+                 console.log(str)
+            });
+            res.on('end', function(){
+                if(res.statusCode === 200){
+                   resolve(str);
+                }
+                reject(str);
+            });
+          });
+         req.on('error', function(e){             
+             reject(e.message);
+         });
+         req.end(); 
+        });
     }
     
     

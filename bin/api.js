@@ -55,7 +55,7 @@ module.exports = function(express){
         });
         api.post('/ipay', function(req, res){//this rout returns the payment interface of ipay...
                 var formdata = JSON.stringify(req.body);
-                var url = '/payments/v2/transact';
+                var url = 'https://payments.ipayafrica.com/v3/ke?';
                 var file;
                 fs.readFile(`../html/billing/pay.html`).then(function(exists)
                 {
@@ -66,24 +66,12 @@ module.exports = function(express){
                     return db.insertquery(con,JSON.parse(formdata));
                 },function (err) {
                     throw {'error':{name:'A Database Error',text:err.message}};
-                }).then(function(id){  //take not from here we will reuse for reload of page on fail
-                    var ipaystring = bill.restpay(JSON.parse(formdata),id);                     
-                    console.log(ipaystring)                                           
-                    return requester.ipayresttest(ipaystring,url)
-                }).then(function (data) {
-                    if(data.data !== undefined){
-                        data.data.biller = formdata.p1;
-                        console.log(data)
-                        return handlebars.compile(file)(data.data);                        
-                        }                                  
-                      throw {error:{name:'404', text:"Not Found any data"}};                        
-                }).then(function(tpl) {
-                    res.set({
-                  //'ETag': hash,
-                    'Cache-Control': 'public, no-cache'
-                        });
-                    res.send(tpl);
-                    
+                }).then(function(id){  //take note from here we will reuse for reload of page on fail
+                    var ipaystring = bill.webpay(JSON.parse(formdata),id); 
+                    var querystr = querystring.stringify(ipaystring)                    
+                    console.log(querystr);                                  
+                    return res.redirect(url+querystr);
+
                 }).catch(function(error) {
                     console.log(error)
                     var exists = fs.readFile(`../html/billing/error.html`)
@@ -96,6 +84,110 @@ module.exports = function(express){
                     res.send(tpl);
                 });
          });
+         api.get('/ipn', function(req, res){
+            var getvars = req.query, url = '';
+            var ipnstring = {
+            vendor: getvars.vendor,
+            id: getvars.id,
+            ivm: getvars.ivm,
+            qwh: getvars.qwh,
+            afd: getvars.afd,
+            poi: getvars.poi,
+            uyt: getvars.uyt,
+            ifd: getvars.ifd
+        }
+            requester._get('https://www.ipayafrica.com/ipn/'+querystring.stringify(ipnstring)).
+            then(function(success)
+             {
+                 if(success !== undefined){
+                        paymentstatus = bill.ipn(success) //returns true or 'status like less, failed, used if not successful'
+                        console.log(paymentstatus+"payment status")
+                    if(paymentstatus == true){ //if true trigger a call to the billing API
+                        console.log(paymentstatus+"payment status")
+                        var paystring ={};
+                        paystring.biller_name = data.p1;
+                        paystring.account =  data.p2;
+                        paystring.phone = data.msisdn_id;
+                        paystring.amount = data.p4 ;
+                        paystring.vid = 'demo'
+                        var forpaystring  = bill.paybill(paystring);
+                        return requester.$http(forpaystring,'/ipay-billing/create', 'apis.ipayafrica.com', headers)                
+                            
+                    }else if(paymentstatus !== true){ //Else lenga story and display the transaction failed
+                        console.log(paymentstatus+"payment status")
+                           
+                      throw {error:{'name':paymentstatus,'text':"The transaction is "+paymentstatus+" Therefore the account has not been credited"}};                                                                         
+                    }//end of the nested if
+                    }else{
+                      throw {error:{'name':'404','text':"Ipay did not return a response, try again"}};                         
+                    }//end of the outer if
+                                                        
+                }).then(function (success) {//returned promise from requeter.$http()
+                    success =  success.msg;
+                     return fs.readFile(`../html/billing/complete.html`)
+                }).then(function(exists){
+                    var file = exists.toString('utf-8');
+                    var tpl  = handlebars.compile(file)(success);
+                    res.set({
+                    //'ETag': hash,
+                    'Cache-Control': 'public, no-cache'
+                        });
+                    res.send(tpl);
+                }).catch(function(error) {//catch all any possible errors
+                   fs.readFile(`../html/billing/error.html`).then(function(exists){
+                       var file = exists.toString('utf-8');
+                    var tpl  = handlebars.compile(file)(error);
+                    res.set({
+                    //'ETag': hash,
+                    'Cache-Control': 'public, no-cache'
+                        });
+                    res.send(tpl);
+                   });                 
+                });
+         });
+        // api.post('/ipay', function(req, res){//this rout returns the payment interface of ipay...
+        //         var formdata = JSON.stringify(req.body);
+        //         var url = '/payments/v2/transact';
+        //         var file;
+        //         fs.readFile(`../html/billing/pay.html`).then(function(exists)
+        //         {
+        //             file = exists.toString('utf-8');
+        //             return file;
+        //         }).then(function(file) { //insert into db first
+        //             var con = db.connection(db.configs); 
+        //             return db.insertquery(con,JSON.parse(formdata));
+        //         },function (err) {
+        //             throw {'error':{name:'A Database Error',text:err.message}};
+        //         }).then(function(id){  //take note from here we will reuse for reload of page on fail
+        //             var ipaystring = bill.restpay(JSON.parse(formdata),id);                     
+        //             console.log(ipaystring)                                           
+        //             return requester.ipayresttest(ipaystring,url)
+        //         }).then(function (data) {
+        //             if(data.data !== undefined){
+        //                 data.data.biller = formdata.p1;
+        //                 console.log(data)
+        //                 return handlebars.compile(file)(data.data);                        
+        //                 }                                  
+        //               throw {error:{name:'404', text:"Not Found any data"}};                        
+        //         }).then(function(tpl) {
+        //             res.set({
+        //           //'ETag': hash,
+        //             'Cache-Control': 'public, no-cache'
+        //                 });
+        //             res.send(tpl);
+                    
+        //         }).catch(function(error) {
+        //             console.log(error)
+        //             var exists = fs.readFile(`../html/billing/error.html`)
+        //             var file = exists.toString('utf-8');
+        //             var tpl  = handlebars.compile(file)(error);
+        //             res.set({
+        //             //'ETag': hash,
+        //             'Cache-Control': 'public, no-cache'
+        //                 });
+        //             res.send(tpl);
+        //         });
+        //  });
          api.post('/ipay/mobile', function(req, res){//transact call for mobile rest integration
                 var formdata = req.body;
                 var url = '/payments/v2/transact/mobilemoney', success;

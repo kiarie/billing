@@ -3,7 +3,8 @@ var app = express();
 var router = require('./bin/api');
 const fs = require('mz/fs');
 const handlebars = require('handlebars');
-var requester = require('./bin/requester');
+var requester = require('./bin/requester'),
+  port = process.env.PORT || 3000;
 
 
 // apply the routes to our application
@@ -11,19 +12,21 @@ var requester = require('./bin/requester');
 
 
 const templateUrl = /([^/]*)(\/|\/index.html)$/;
-app.get('/partial/:name', function(req, res) {
-  var partial = req.params.name;
-  var files;
-  var f; //this will be the file
-  
-//   console.log(partial);
+app.get('/partial/:name/:specname?', function(req, res) {
+  var partial,files,f; //initialise three variables at once awesome!! js killed it
+  //f->this will be the file, partial->will be the file name, files->is the contents of the file read
+  if(!req.params.specname){
+    partial = req.params.name;
+  }else{
+    partial = req.params.specname;    
+  }
+
   var compare = partial === 'contact' || partial ==='buy' || partial ==='properties' || partial === 'payments';
         
     if(compare) {
     files = fs.readFile(`../html/billing/${partial}.html`);
     }else{
-        files = fs.readFile(`../html/billing/utils.html`);
-        // files = fs.readFile(`../html/billing/home.html`);
+        files = fs.readFile(`../html/billing/utils.html`);//the page which lists the billing options for a category
     }
     files.
     then(file => f = file.toString('utf-8')).    
@@ -89,5 +92,6 @@ app.use(function(req, res, next) {
   })
   
 });
-app.listen('3000');
+
+app.listen(port);
 console.log('Server running!');
