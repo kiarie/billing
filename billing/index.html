@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]> <html class="no-js"> <![endif]-->
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>iPay Billing &mdash;</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="iPay Billing site" />
+	<meta name="keywords" content="iPay, pay, bills, airtime, electricity, Pay tv, Lipa, eLipa,billing,mobile first, responsive" />
+	<meta name="author" content="ipayafrica.com" />
+
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link type="image/x-icon" rel="icon" href="favicon.ico">
+
+	<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700' rel='stylesheet' type='text/css'> -->
+	
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<!-- Flexslider  -->
+	<link rel="stylesheet" href="css/flexslider.css">
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="css/style.css">
+
+	<!-- Modernizr JS -->
+	<!--<script src="js/modernizr-2.6.2.min.js"></script>-->
+
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+ <script>
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('7f15e1e5c14e3e3db3fd', {
+      encrypted: true
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      alert(data.message);
+    });
+  </script>
+	</head>
+	<body>
+	
+	
+	<div id="fh5co-page">
+	<header id="fh5co-header" role="banner">
+		<div class="container">
+			<div class="row">
+				<div class="header-inner">
+					<h1><a href="/"><span style="color:#f29103;">i</span><span style="color:#295eaf;">Pay</span> Billing<span>.</span></a></h1>
+					<nav role="navigation">
+						<ul class="channels">
+                            <!--<li><a href="home">Here</a></li>
+							<li><a href="buy">Rent</a></li>
+							<li><a href="properties">Properties</a></li>-->
+							<li class="call"><a href="tel://254713129623"><i class="icon-phone"></i>+254-713-129-623</a></li>
+							<li class="cta"><a href="#contact">Contact us</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+    <div class="lutry"></div>
+    <div id="slid">
+        <aside id="fh5co-hero" clsas="js-fullheight">
+		<div class="flexslider js-fullheight">
+			<ul class="slides">
+          	   	
+		   	<li style="background-image: url(images/slide_2.jpg);">
+		   		<div class="container">
+		   			<div class="col-md-12 text-center js-fullheight fh5co-property-brief slider-text">
+		   				<div class="fh5co-property-brief-inner">
+		   					<div class="fh5co-box">
+		   						<h3><a href="#">15 Apartments Of Type B</a></h3>
+		   						<div class="price-status">
+                             	<span class="price">$2,200<span class="per">/Month</span> <a href="#" class="tag">For Rent</a></span>
+	                        </div>
+	                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque dicta magni amet atque doloremque velit unde adipisci omnis hic quaerat.</p>
+	                        <p class="fh5co-property-specification">
+                        		<span><strong>3500</strong> Sq Ft</span>  <span><strong>3</strong> Beds</span>  <span><strong>3.5</strong> Baths</span>  <span><strong>2</strong> Garages</span>
+                        	</p>
+	                        <p><a href="#" class="btn btn-primary">Learn more</a></p>
+	   						</div>
+		   				</div>
+		   			</div>
+		   		</div>
+		   	</li>
+				<li style="background-image: url(images/slide_3.jpg);">
+		   		<div class="container">
+		   			<div class="col-md-12 text-center js-fullheight fh5co-property-brief slider-text">
+		   				<div class="fh5co-property-brief-inner">
+		   					<div class="fh5co-box">
+		   						<h3><a href="#">401 Biscayne Boulevard, Miami</a></h3>
+		   						<div class="price-status">
+                             	<span class="price">$1,540,000 <a href="#" class="tag">For Sale</a></span>
+	                        </div>
+	                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque dicta magni amet atque doloremque velit unde adipisci omnis hic quaerat.</p>
+	                        <p class="fh5co-property-specification">
+                        		<span><strong>3500</strong> Sq Ft</span>  <span><strong>3</strong> Beds</span>  <span><strong>3.5</strong> Baths</span>  <span><strong>2</strong> Garages</span>
+                        	</p>
+	                        <p><a href="#" class="btn btn-primary">Learn more</a></p>
+
+
+	   						</div>
+		   				</div>
+		   			</div>
+		   		</div>
+		   	</li>
+		   	
+		  	</ul>
+	  	</div>
+	</aside>
+    </div>
+    <!--section 7 Elipa app right here -->
+	<div class="fh5co-cta" style="background-image: url(images/slide_4.jpg);">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="col-md-12 text-center " data-animate-effect="fadeIn">
+				<h3>Download Our app on Google Playstore.</h3>
+				<p><a href="#" class="btn btn-primary btn-outline with-arrow">Download Now! <i class="icon-arrow-right"></i></a></p>
+			</div>
+		</div>
+	</div>
+  
+<!--section 8 the footer :}{: -->
+	
+	<footer id="fh5co-footer" role="contentinfo">
+	
+		<div class="container">
+			<div class="col-md-3 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
+				<h3>About Us</h3>
+				<p>iPay Billing is the best of iPay offerings that brings convinience to paying of bills, We do our best it's the least you expect from us. </p>
+				<p><a href="#" class="btn btn-primary btn-outline with-arrow btn-sm">I'm button <i class="icon-arrow-right"></i></a></p>
+			</div>
+			<div class="col-md-6 col-md-push-1 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
+				<h3>Our Services</h3>
+				<ul class="float">
+					<li><a href="#">Payent Processing</a></li>
+					<li><a href="#">eLipa Wallet</a></li>
+					<li><a href="#">Find Us</a></li>
+				</ul>
+				<ul class="float">
+					<li><a href="#">Contact Us</a></li>
+					
+				</ul>
+
+			</div>
+
+			<div class="col-md-2 col-md-push-1 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
+				<h3>Follow Us</h3>
+				<ul class="fh5co-social">
+					<li><a href="#"><i class="icon-twitter"></i></a></li>
+					<li><a href="#"><i class="icon-facebook"></i></a></li>
+					<li><a href="#"><i class="icon-google-plus"></i></a></li>
+					<li><a href="#"><i class="icon-instagram"></i></a></li>
+				</ul>
+			</div>
+			
+			
+			<div class="col-md-12 fh5co-copyright text-center">
+				<p>&copy; 2016 iPayafrica. All Rights Reserved. <span>Designed with <i class="icon-heart"></i> by <a href="https://ipayafrica.com" target="_blank">iPay Africa </a></p>	
+			</div>
+			
+		</div>
+	</footer>
+	</div>
+	<script id="entry-template" type="text/x-handlebars-template">
+           {{#each items}}
+            <li><a href="#{{short_name}}">{{name}}</a></li>
+            {{/each}}
+            <li><a href="#buy">Rent</a></li>
+			<li><a href="#properties">Properties</a></li>
+            <li class="call"><a href="tel://+254-713-129-623"><i class="icon-phone"></i>+254-713-129-623</a></li>
+		    <li class="cta"><a href="#contact">Contact us</a></li>
+            </script>
+	
+	<!-- jQuery -->
+	
+    <script src="js/bills.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/handlebars.js"></script>
+	<script  src="js/jquery.waypoints.min.js"></script>
+	<!-- Flexslider -->
+	
+	<!-- MAIN JS -->
+	<script  type="text/javascript" src="js/main.js"></script>
+    <script   src="js/jquery.flexslider-min.js"></script>
+  <script src="https://js.pusher.com/3.2/pusher.min.js"></script>
+    
+	<!--<link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>-->
+
+	</body>
+</html>
+

@@ -72,7 +72,7 @@ app.get('/partial/:name/:specname?', function(req, res) {
 
 //////////////////////////////////////////////
 app.use('/', require('./bin/api')(express));
-app.use(express.static('../html/billing'));
+app.use(express.static('billing'));
 app.use(function(req, res, next) {
   var err = new Error('Page Not Found');
   err.status = 404;

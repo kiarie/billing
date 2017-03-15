@@ -1,0 +1,101 @@
+<!--section 2 Where our deals are -->
+
+		<div class="container animated fadeIn">
+     			<div class="row category-list">
+
+                
+				<div class="col-md-offset-1 col-md-11 col-sm-12 animated fadeInUp" data-animate-effect="fadeIn">
+
+
+					<div class="fh5co-property">
+						<figure class="visible-sm-block">
+							<img src="images/slide_3.jpg" alt="ipay payments" class="img-responsive">
+							<a href="#" class="tag">{{sid}}</a>
+						</figure>
+						<div class="fh5co-property-innter">
+                            <h3>Paying for Order:&nbsp;<a>{{oid}}</a></h3>
+                            
+                            <ul class="nav nav-pills">
+                                {{#each payment_channels}}
+                                    <li role="presentation" class="rem-active" ><a href="#" id="{{name}}">{{name}}</a></li>
+                                {{/each}}
+                                    <li role="presentation" class="rem-active" ><a href="#" id="CARD">Visa/Mastercard</a></li>
+                                
+                            </ul>
+                            <ul class="MPESA">
+                                <li>Go to the <b>M-PESA</b> menu on your phone</li>
+                                <li>Select PayBill Option : Enter Business Number:<b>510800</b></li>
+                                <li>Enter <span style="color:black; font-weight:9px;">{{account}}</span> as the Account Number</li>
+                                <li>Enter the <b>EXACT</b> amount <span style="color:#118DF0; font-weight:9px;">sh {{amount}}</span></li>
+                                <li>Enter your <b>PIN</b> and then send the money</li>
+                                <li>Complete your transaction on your phone</li>
+                                <li>You will receive a transaction confirmation SMS from MPESA</li>
+                                <li>Then click on the <b>complete</b> button below</li>
+                        </ul>
+                           <ul class="AIRTEL">
+                                <li>Go to the <b>Airtel</b> menu on your phone</li>
+                                <li>Select To Make Payments</li>
+                                <li>Select PayBill Option</li>
+                                <li>Select Others</li>
+                                <li>Enter Business Name:<b>510800</b></li>
+                                <li>Enter the <b>EXACT</b> amount <span style="color:#118DF0; font-weight:9px;">sh {{amount}}</span></li>
+                                <li>Enter your <b>PIN</b></li>
+                                <li>Enter <span style="color:black; font-weight:9px;">{{account}}</span> as the Reference</li> and then send the money</li>
+                                <li>You will receive a transaction confirmation SMS from MPESA</li>
+                                <li>Then click on the <b>complete</b> button below</li>
+                        </ul>
+                        <ul class = "CARD">
+                        <form name="complete"  class="form-horizontal" id="completeform" method="post" action="/ipay/card">
+                        <input type="hidden" name="sid" value="{{sid}}">
+                        <input type="hidden" name ="vid" value="demo">
+                        <input type="hidden" name ="curr" value="KES">
+                        <div class="form-group">                        
+                        <input type="number" class="form-control" maxlength=4 name ="cvv" placeholder="CVV">
+                        </div>
+                        <div class="form-group">
+                        <input type="number" class="form-control" name ="cardno" maxlength=16 placeholder="Card Number">
+                        </div>
+                        <div class="form-group">
+                        <input type="number" class="form-control" name ="month" maxlength=2 placeholder="Month">
+                        </div>
+                        <div class="form-group">
+                        <input type="number" class="form-control" name ="year" maxlength=2 placeholder="Year">
+                        </div>
+                        <input type="hidden" name ="cust_address" value="IPAY CUSTOM">
+                        <input type="hidden" name ="cust_postcode" value="00100">
+                        <div class="form-group">
+                        <input type="text" class="form-control" name ="cust_city" value="Nairobi">
+                        </div>
+                        <input type="hidden" name ="cust_stateprov" value="State">
+                        <div class="form-group">
+                        <input type="text" class="form-control" name ="cust_country" value="Kenya">
+                        </div>
+                        <input type="hidden" name ="fname" value="First" >
+                        <input type="hidden" name ="lname" value="Second">
+
+                        <p class="">
+                            <span><strong>{{minimum_balance}}</strong> Minimum Purchase</span>
+                            <span><button type="submit" class="btn btn-success">COMPLETE</button></span>
+                        </p>
+                        </form>
+                        </ul>
+		               <p>Buying??  Pay Fast and easily anywhere with iPay.</p>
+	            	</div>
+                        <form name="complete" class="MPESA AIRTEL" id="completeform" method="post" action="/ipay/mobile" onsubmit="postforms(event)">
+                        <input type="hidden" name="sid" value="{{sid}}">
+                        <input type="hidden" name ="vid" value="demo">
+                        <p class="fh5co-property-specification">
+                            <span><strong>{{minimum_balance}}</strong> Minimum Purchase</span>
+                            <span><button type="submit" class="btn btn-success">COMPLETE</button></span>
+                        </p>
+                        </form>
+                        
+	            	
+					</div>
+
+					
+				</div>
+
+			</div>
+            
+		</div>

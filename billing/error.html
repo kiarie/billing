@@ -1,0 +1,26 @@
+		<div class="container animated fadeInUp">
+            <div class="col-md-12 col-sm-12 row">
+	           <div class="fh5co-property">
+                    
+                   {{#if error.name}}
+                    <div class="fh5co-property-innter">
+                       {{error.name}}
+                       <span style="color:red;"><b>
+                           {{error.text}}
+                           </b></span>
+                   </div>
+                   {{else}}
+                   {{#each error}}
+                   <div class="fh5co-property-innter">
+                       <b>ERROR:</b>
+                       <br><b>{{this.name}}</b>
+                       <span style="color:red;"><br>
+                           <b>{{this.text}}
+                           </b></span>
+                   </div>
+                   {{/each}}
+                   {{/if}}
+                   
+               </div>
+            </div>
+       </div>
