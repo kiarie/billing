@@ -24,9 +24,9 @@ app.get('/partial/:name/:specname?', function(req, res) {
   var compare = partial === 'contact' || partial ==='buy' || partial ==='properties' || partial === 'payments';
         
     if(compare) {
-    files = fs.readFile(`../html/billing/${partial}.html`);
+    files = fs.readFile(`billing/${partial}.html`);
     }else{
-        files = fs.readFile(`../html/billing/utils.html`);//the page which lists the billing options for a category
+        files = fs.readFile(`billing/utils.html`);//the page which lists the billing options for a category
     }
     files.
     then(file => f = file.toString('utf-8')).    
@@ -62,7 +62,7 @@ app.get('/partial/:name/:specname?', function(req, res) {
 /*
 
       files = [
-          fs.readFile(`../html/billing/${path}.html`),
+          fs.readFile(`billing/${path}.html`),
           fs.readFile(`../html/billing/${path}.html`),
           fs.readFile(`../html/billing/${path}.html`)
       ];
@@ -76,7 +76,7 @@ app.use(express.static('billing'));
 app.use(function(req, res, next) {
   var err = new Error('Page Not Found');
   err.status = 404;
-  var files = [fs.readFile(`../html/billing/error.html`)];
+  var files = [fs.readFile(`billing/error.html`)];
  
     
   Promise.all(files).

@@ -57,7 +57,7 @@ module.exports = function(express){
                 var formdata = JSON.stringify(req.body);
                 var url = 'https://payments.ipayafrica.com/v3/ke?';
                 var file;
-                fs.readFile(`../html/billing/pay.html`).then(function(exists)
+                fs.readFile(`billing/pay.html`).then(function(exists)
                 {
                     file = exists.toString('utf-8');
                     return file;
@@ -74,7 +74,7 @@ module.exports = function(express){
 
                 }).catch(function(error) {
                     console.log(error)
-                    var exists = fs.readFile(`../html/billing/error.html`)
+                    var exists = fs.readFile(`billing/error.html`)
                     var file = exists.toString('utf-8');
                     var tpl  = handlebars.compile(file)(error);
                     res.set({
@@ -124,7 +124,7 @@ module.exports = function(express){
                                                         
                 }).then(function (success) {//returned promise from requeter.$http()
                     success =  success.msg;
-                     return fs.readFile(`../html/billing/complete.html`)
+                     return fs.readFile(`billing/complete.html`)
                 }).then(function(exists){
                     var file = exists.toString('utf-8');
                     var tpl  = handlebars.compile(file)(success);
@@ -134,7 +134,7 @@ module.exports = function(express){
                         });
                     res.send(tpl);
                 }).catch(function(error) {//catch all any possible errors
-                   fs.readFile(`../html/billing/error.html`).then(function(exists){
+                   fs.readFile(`billing/error.html`).then(function(exists){
                        var file = exists.toString('utf-8');
                     var tpl  = handlebars.compile(file)(error);
                     res.set({
@@ -149,7 +149,7 @@ module.exports = function(express){
         //         var formdata = JSON.stringify(req.body);
         //         var url = '/payments/v2/transact';
         //         var file;
-        //         fs.readFile(`../html/billing/pay.html`).then(function(exists)
+        //         fs.readFile(`billing/pay.html`).then(function(exists)
         //         {
         //             file = exists.toString('utf-8');
         //             return file;
@@ -178,7 +178,7 @@ module.exports = function(express){
                     
         //         }).catch(function(error) {
         //             console.log(error)
-        //             var exists = fs.readFile(`../html/billing/error.html`)
+        //             var exists = fs.readFile(`billing/error.html`)
         //             var file = exists.toString('utf-8');
         //             var tpl  = handlebars.compile(file)(error);
         //             res.set({
@@ -218,7 +218,7 @@ module.exports = function(express){
                                                         
                 }).then(function (success) {//returned promise from requeter.$http()
                     success =  success.msg;
-                     return fs.readFile(`../html/billing/complete.html`)
+                     return fs.readFile(`billing/complete.html`)
                 }).then(function(exists){
                     var file = exists.toString('utf-8');
                     var tpl  = handlebars.compile(file)(success);
@@ -228,7 +228,7 @@ module.exports = function(express){
                         });
                     res.send(tpl);
                 }).catch(function(error) {//catch all any possible errors
-                   fs.readFile(`../html/billing/error.html`).then(function(exists){
+                   fs.readFile(`billing/error.html`).then(function(exists){
                        var file = exists.toString('utf-8');
                     var tpl  = handlebars.compile(file)(error);
                     res.set({
@@ -274,7 +274,7 @@ module.exports = function(express){
                 }).then(function (sucessdata) {//returned promise from requester.$http()
                     success =  sucessdata.msg;
                     console.log("success Line 184:"+success)
-                     return fs.readFile(`../html/billing/complete.html`)
+                     return fs.readFile(`billing/complete.html`)
                 }).then(function(exists){
                     var file = exists.toString('utf-8');
                     var tpl  = handlebars.compile(file)(success);
@@ -284,7 +284,7 @@ module.exports = function(express){
                         });
                     res.send(tpl);
                 }).catch(function(error) {//catch all any possible errors
-                   fs.readFile(`../html/billing/error.html`).then(function(exists){
+                   fs.readFile(`billing/error.html`).then(function(exists){
                        var file = exists.toString('utf-8');
                     var tpl  = handlebars.compile(file)(error);
                     res.set({
