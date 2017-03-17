@@ -31,15 +31,28 @@ module.exports = {
         });
         
     },
-    selectquery:function(connection, fields) {
+    selectquery:function(connection, fields, table, whereID) {
         return new Promise(function(resolve, reject){
-            connection.query('SELECT amount, telephone as tel, account, biller,category, email as eml WHERE id LIKE = ?',[fields], function(err, result){
+            connection.query('SELECT ?? FROM ?? WHERE id LIKE id = ?',[fields, table, whereID], function(err, result){
                 if(err) reject(err);
-                
+              
                 resolve(result)
                 connection.end();
             })
         })
+    },
+    updatequery:function(connection, fields, table, Id){
+         return new Promise(function(resolve, reject){
+             connection.query('UPDATE '+table+' SET ? WHERE id=' + connection.escape(Id), fields, function(err, result){
+                if(err){
+                    console.log(err);
+                    reject(err);
+                }
+                resolve(result.affectedRows);
+                console.log(result)
+                // connection.end();                
+             });
+         });
     },
     connectionend:function (connection) {
         connection.end();        

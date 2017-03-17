@@ -67,8 +67,9 @@ module.exports = function(express){
                 },function (err) {
                     throw {'error':{name:'A Database Error',text:err.message}};
                 }).then(function(id){  //take note from here we will reuse for reload of page on fail
-                    var ipaystring = bill.webpay(JSON.parse(formdata),id); 
-                    var querystr = querystring.stringify(ipaystring)                    
+                    var host = req.headers.referer,
+                        ipaystring = bill.webpay(JSON.parse(formdata),id, host),
+                        querystr = querystring.stringify(ipaystring);                    
                     console.log(querystr);                                  
                     return res.redirect(url+querystr);
 
@@ -85,24 +86,36 @@ module.exports = function(express){
                 });
          });
          api.get('/ipn', function(req, res){
-            var getvars = req.query, url = '';
-            var ipnstring = {
-            vendor: getvars.vendor,
-            id: getvars.id,
-            ivm: getvars.ivm,
-            qwh: getvars.qwh,
-            afd: getvars.afd,
-            poi: getvars.poi,
-            uyt: getvars.uyt,
-            ifd: getvars.ifd
-        }
+            var getvars = req.query,
+                url,
+                success,
+                headers={},
+                paymentstatus,
+                con = db.connection(db.configs),//initialise the variables the comma seperated way
+                ipnstring = {   vendor: getvars.vendor,
+                                id: getvars.id,
+                                ivm: getvars.ivm,
+                                qwh: getvars.qwh,
+                                afd: getvars.afd,
+                                poi: getvars.poi,
+                                uyt: getvars.uyt,
+                                ifd: getvars.ifd
+                            }
             requester._get('https://www.ipayafrica.com/ipn/'+querystring.stringify(ipnstring)).
             then(function(success)
              {
                  if(success !== undefined){
-                        paymentstatus = bill.ipn(success) //returns true or 'status like less, failed, used if not successful'
-                        console.log(paymentstatus+"payment status")
-                    if(paymentstatus == true){ //if true trigger a call to the billing API
+                    paymentstatus = bill.ipn(success) //returns true or 'status like less, failed, used if not successful'
+                    var formdata = { paid_status : paymentstatus}; 
+                            
+                    return db.updatequery(con,formdata,'billing_orders',ipnstring.id);
+                 }else{
+                    throw {error:{'name':'404','text':"Ipay did not return a response, try again"}};     console.log('failed after the check')              
+                }//end of the  if
+            }).
+            then(function(updated){
+                        
+                    if(paymentstatus == true && updated > 0){ //if true trigger a call to the billing API
                         console.log(paymentstatus+"payment status")
                         var paystring ={};
                         paystring.biller_name = data.p1;
@@ -116,35 +129,31 @@ module.exports = function(express){
                     }else if(paymentstatus !== true){ //Else lenga story and display the transaction failed
                         console.log(paymentstatus+"payment status")
                            
-                      throw {error:{'name':paymentstatus,'text':"The transaction is "+paymentstatus+" Therefore the account has not been credited"}};                                                                         
-                    }//end of the nested if
-                    }else{
-                      throw {error:{'name':'404','text':"Ipay did not return a response, try again"}};                         
-                    }//end of the outer if
-                                                        
+                      throw {error:{'name':paymentstatus,'text':"The transaction payment status is "+paymentstatus+" Therefore the account has not been credited"}};                                                                         
+                    }//end of the if                                                      
                 }).then(function (success) {//returned promise from requeter.$http()
                     success =  success.msg;
-                     return fs.readFile(`billing/complete.html`)
-                }).then(function(exists){
-                    var file = exists.toString('utf-8');
-                    var tpl  = handlebars.compile(file)(success);
-                    res.set({
-                    //'ETag': hash,
-                    'Cache-Control': 'public, no-cache'
-                        });
-                    res.send(tpl);
+                    var formupdate = { status_message : success.msg};      
+                    return db.updatequery(con,formupdate,'billing_orders',ipnstring.id);
+                }).then(function(updated){
+                    if(updated > 0){
+                     res.redirect('/?fl='+ipnstring.id+"&su")
+                    }else{
+                      throw {error:{'name':'404','text':"Could Not Update the Transaction status"}}; 
+                    }
                 }).catch(function(error) {//catch all any possible errors
-                   fs.readFile(`billing/error.html`).then(function(exists){
-                       var file = exists.toString('utf-8');
-                    var tpl  = handlebars.compile(file)(error);
-                    res.set({
-                    //'ETag': hash,
-                    'Cache-Control': 'public, no-cache'
-                        });
-                    res.send(tpl);
-                   });                 
+                    var formupdate = { status_message : error.error.text}; 
+                    console.log(formupdate)     
+                    db.updatequery(con,formupdate,'billing_orders',ipnstring.id);
+                    db.connectionend(con);
+                    var base64 = new Buffer(JSON.stringify(formupdate)).toString('base64');
+                    res.redirect('/?fl='+ipnstring.id+'&e='+base64)
+                                   
                 });
          });
+         //redirects to home/
+         //shows the error
+         //allows for navigation
         // api.post('/ipay', function(req, res){//this rout returns the payment interface of ipay...
         //         var formdata = JSON.stringify(req.body);
         //         var url = '/payments/v2/transact';

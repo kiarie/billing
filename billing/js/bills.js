@@ -13,8 +13,11 @@
             var rdata = JSON.parse(data);
             var context = {items: rdata};
             var html  = template(context);
+            console.log(context);
             //iterate through the elem and apply function to each element.
-            Array.from(compileto).map(function(elem){elem.innerHTML = html});
+            Array.from(compileto).map(function(elem){elem.innerHTML = html; 
+            // console.log(html);
+            });
             getLinks();
             
         },function(error){
@@ -60,6 +63,7 @@
                 // _listbills();
             }
             xhr.open('GET',`partial/${pathname}` );
+            xhr.setRequestHeader('X-Requested-With','XMLHttpRequest')
             xhr.send();
             
         }
@@ -81,6 +85,7 @@
                 }
                 xhr.onerror = reject;
                 xhr.open('GET',`${pathname}` );
+                xhr.setRequestHeader('X-Requested-With','XMLHttpRequest')
                 xhr.send();
             }); 
         }
@@ -99,6 +104,7 @@
                 xhr.onerror = reject;
                 xhr.open('POST',`${pathname}` );
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');                
                 xhr.send(formdata);
            }); 
         }
@@ -274,7 +280,7 @@
             var form = evt.target;//this is the submited form
             console.log(form.tel.value)
            
-            if(isNaN(form.tel.value) || form.tel.value.length < 12 || form.tel.value == ""){
+            if(isNaN(form.tel.value) || form.tel.value.length < 12 || form.tel.value == "" || form.tel.value.substring(0,3) !=="254"){
                 console.log(form.tel.parentElement.parentElement); 
                  form.tel.parentElement.parentElement.classList.add('has-error');               
                  form.tel.focus(); return false;
@@ -304,7 +310,7 @@
              
              switch(e.name){
                  case 'tel':
-                 if(isNaN(e.value) || e.value.length < 12 ||e.value.length > 12 || e.value == "") 
+                 if(isNaN(e.value) || e.value.length < 12 ||e.value.length > 12 || e.value == "" || e.value.substring(0,3) !=="254") 
                     {
                     e.setCustomValidity("Enter a valid Telephone number starting with the prefix 254");
                     addClass(e.parentElement.parentElement, 'has-error');
@@ -359,12 +365,58 @@
              if(elem.classList.contains($class)) removeclass(elem, $class)
                 console.log('iko sawa')
          }
-         
-        
+         function showAlert(content, header)
+         { 
+             console.log('alerts called')
+             var elem = document.querySelector('.fh5co-property-innter');
+             var closebtn = document.getElementById('closer'),
+                 contents = content;
+             if(content.status_message !== undefined) contents = content.status_message;
+             var headers = document.createElement('h2');
+            //  addClass(headers, 'fh5co-property-innter')             
+             var header_content = document.createTextNode(header);
+             headers.appendChild(header_content);
+             var text = document.createTextNode(contents)
+             var p = document.createElement('p');
+            //  addClass(p, 'fh5co-property-innter')
+             p.appendChild(text);
+
+
+            elem.appendChild(headers);
+            elem.appendChild(p);
+            closebtn.addEventListener('click', dismissAlert);
+            
+            toggleRemove(elem.parentElement, 'hidden')
+            // addClass(elem, 'show');
+         }
+         function _onalert(){
+             if(location.search !== ''){
+                 var querstring = location.search.split('&'),
+                     content = 'Succesfully Processed the transaction',
+                     header = querstring[0].replace('?','').split('=')[1];
+                 if(querstring[1] !=='su'){
+                     content = JSON.parse(atob(querstring[1].split('=')[1]));
+                 }
+                 console.log(content);
+                 var header_content = 'Payment for Order :'+header;
+                 return showAlert(content, header_content);
+             }
+         }
+         function dismissAlert(elem)
+         {
+             var parentElement = elem.target.parentElement.parentElement.parentElement
+             addClass(parentElement, 'hidden')
+             history.replaceState({}, 'Home', '/')
+             console.log(elem.target.parentElement.parentElement.parentElement)
+         }
+        //atob(location.search.split('&')[1].split('=')[1])
+
         window.addEventListener('DOMContentLoaded', _onChange);
         window.addEventListener('DOMContentLoaded', load);//when initial DOM is loaded useful!!
         window.addEventListener('DOMContentLoaded', getLinks);//when initial DOM is loaded
         window.addEventListener('hashchange', _onChange);//when the hash changes
+        window.addEventListener('load', _onalert);
+        
         /**
          * billing status expected
          * {

@@ -47,7 +47,7 @@ module.exports ={
       data.hash = hashid;
       return data;
     },
-    webpay: function(data, id){
+    webpay: function(data, id, host){
          var qrstring = {
             live :'0',
             oid :id,
@@ -61,7 +61,7 @@ module.exports ={
             p2 :data.account,
             p3 :data.category,
             p4 :data.amount,
-            cbk :'localhost:3000/ipn',
+            cbk :host+'ipn',
             cst :'1',
             crl :'0' }
       var hash = require('./hash.js'); //generate hash

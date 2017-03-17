@@ -1,4 +1,7 @@
-		<div class="container animated fadeInUp">
+
+<!--section 2 Where our deals are -->
+    <div id="best-deal">
+        	<div class="container animated fadeInUp">
             <div class="col-md-12 col-sm-12 row">
 	           <div class="fh5co-property">
                     
@@ -20,7 +23,16 @@
                    </div>
                    {{/each}}
                    {{/if}}
-                   
+                   {{#if error.paid_status}}
+                    <div class="fh5co-property-innter">
+                       {{error.paid_status}}
+                       <span style="color:red;"><b>
+                           {{error.status_message}}
+                           </b></span>
+                   </div>
+				   {{/if}}
                </div>
             </div>
        </div>
+</div>
+

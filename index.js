@@ -4,6 +4,7 @@ var router = require('./bin/api');
 const fs = require('mz/fs');
 const handlebars = require('handlebars');
 var requester = require('./bin/requester'),
+    db = require('./bin/logic'),
   port = process.env.PORT || 3000;
 
 
@@ -20,7 +21,7 @@ app.get('/partial/:name/:specname?', function(req, res) {
   }else{
     partial = req.params.specname;    
   }
-
+  console.log(req.xhr);
   var compare = partial === 'contact' || partial ==='buy' || partial ==='properties' || partial === 'payments';
         
     if(compare) {
@@ -45,7 +46,11 @@ app.get('/partial/:name/:specname?', function(req, res) {
         res.send(tpl);
     })
     .catch(error => res.status(500).send(error.toString()));
-  });  
+  }); 
+  /**
+   * use this eventually to serve? 
+   */
+  //app.get('/:name?/:specname?', function(req, res) {}); 
 //   Promise.all(files).
 //   then(files => files.map(f => f.toString('utf-8'))).
 //   then(files => {
@@ -68,10 +73,55 @@ app.get('/partial/:name/:specname?', function(req, res) {
       ];
 
 */
-
+/**
+function ipncallbackHandler(req, res, next)
+{
+  if('e' in req.query){
+    var err_id = req.query.fl;
+    req.files = [fs.readFile(`billing/index.html`),
+                 fs.readFile(`billing/error.html`)];
+   }else{
+       req.files = [fs.readFile(`billing/index.html`)];
+   }
+  return next();
+}
+function homerouter( req, res, next)
+{
+    var files = req.files, 
+        con = db.connection(db.configs),
+        displaydata;
+    Promise.all(files).
+    then(files => files.map(f => f.toString('utf-8'))).
+    then(files => {
+          if('fl' in req.query){
+           db.selectquery(con,['paid_status', 'status_message'], 'billing_orders', req.query.fl).
+           then(function(success){
+              displaydata = success;
+                console.log(success);
+           }).catch(function(err){
+             console.log(err)
+           });
+          }
+          return files.map((f)=>handlebars.compile(f)(displaydata))
+        }).
+    then(files => {
+        const content = files.join('');
+        res.set({
+    //   'ETag': hash,
+        'Cache-Control': 'public, no-cache'
+      });
+      res.send(content);
+    })
+    .catch(error => {
+      console.log(error); res.status(500).send(error.toString())
+    });
+      
+}
+*/
 
 //////////////////////////////////////////////
 app.use('/', require('./bin/api')(express));
+// app.use(ipncallbackHandler, homerouter);
 app.use(express.static('billing'));
 app.use(function(req, res, next) {
   var err = new Error('Page Not Found');
@@ -95,3 +145,4 @@ app.use(function(req, res, next) {
 
 app.listen(port);
 console.log('Server running!');
+//$sudo start billing_node_app
