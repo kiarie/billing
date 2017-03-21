@@ -445,8 +445,7 @@ function _onalert() {
 function dismissAlert(elem) {
     var parentElement = elem.target.parentElement.parentElement.parentElement
     addClass(parentElement, 'hidden')
-    history.replaceState({}, 'Home', '/')
-    //console.log(elem.target.parentElement.parentElement.parentElement)
+    history.replaceState({}, 'Home', '/');
 }
 /**
  *  This function will set the validity errors like the setCustomValidity html5 helper would have

@@ -62,7 +62,9 @@ module.exports = function(express){
                     file = exists.toString('utf-8');
                     return file;
                 }).then(function(file) { //insert into db first
-                    var con = db.connection(db.configs); 
+                    var config = db.configs.online;
+                    if(req.hostname == 'localhost')  config = db.configs.local;
+                    var con = db.connection(config); 
                     return db.insertquery(con,JSON.parse(formdata));
                 },function (err) {
                     throw {'error':{name:'A Database Error',text:err.message}};
@@ -91,7 +93,7 @@ module.exports = function(express){
                 success,
                 headers={},
                 paymentstatus,
-                con = db.connection(db.configs),//initialise the variables the comma seperated way
+                configs = db.configs.online,
                 ipnstring = {   vendor: getvars.vendor,
                                 id: getvars.id,
                                 ivm: getvars.ivm,
@@ -101,6 +103,8 @@ module.exports = function(express){
                                 uyt: getvars.uyt,
                                 ifd: getvars.ifd
                             }
+            if(req.hostname == 'localhost') configs = db.configs.local
+            var con = db.connection(configs)
             requester._get('https://www.ipayafrica.com/ipn/'+querystring.stringify(ipnstring)).
             then(function(success)
              {

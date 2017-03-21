@@ -3,10 +3,19 @@ const mysql = require('mysql');
 
 module.exports = {
     configs:{
-        host:"localhost",
-        user:"root",
-        password: "admin",
-        database : 'online_billing'
+        online:{
+            host:"46.101.121.39",
+            user:"ipay",
+            password: "aun64UY2wJCySTn5",
+            database : 'online_billing'
+              },
+        local:{
+             host:"localhost",
+             user:"root",
+             password: "admin",
+             database : 'online_billing'
+             }
+       
     },
     connection:function (configs) {
      var connection = mysql.createConnection(configs);
