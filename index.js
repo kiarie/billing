@@ -14,12 +14,13 @@ var requester = require('./bin/requester'),
 
 const templateUrl = /([^/]*)(\/|\/index.html)$/;
 app.get('/partial/:name/:specname?', function(req, res) {
-  var partial,files,f; //initialise three variables at once awesome!! js killed it
+  var partial, subcategory = "none",files,f; //initialise three variables at once awesome!! js killed it
   //f->this will be the file, partial->will be the file name, files->is the contents of the file read
   if(!req.params.specname){
     partial = req.params.name;
   }else{
     partial = req.params.specname;    
+    subcategory = req.params.name; //e.g. Airtel, safaricom, zuku
   }
   console.log(req.xhr);
   var compare = partial === 'contact' || partial ==='buy' || partial ==='properties' || partial === 'payments';
@@ -35,7 +36,7 @@ app.get('/partial/:name/:specname?', function(req, res) {
        return requester.$get('/billing/v2/list/'+partial)
     }).
     then(data => {
-    return handlebars.compile(f)({categories : data.data, name : partial})
+    return handlebars.compile(f)({categories : data.data, name : partial, image_url:subcategory})
     }).
     then(tpl => {
         // const content = files.join('');

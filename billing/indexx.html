@@ -1,0 +1,86 @@
+<html>
+<head>
+<style>@keyframes drawlogo {
+  0%   { stroke-dashoffset: 2024; fill: #DCDCDC; stroke: rgba(0, 0, 0, 0.7); }
+  60%  { fill: #DCDCDC; }
+  80%  { fill: rgba(0, 0, 0, 0.7); stroke-dashoffset: 0; }
+  95%  { fill: rgba(0, 0, 0, 0.7); stroke: rgba(0, 0, 0, 0.7); }
+  100% { fill: #DCDCDC; stroke-dashoffset: 0; stroke: #f5f5f5; }
+}
+@-webkit-keyframes drawlogo {
+  0%   { stroke-dashoffset: 2024; fill: #DCDCDC; stroke: rgba(0, 0, 0, 0.7); }
+  60%  { fill: #DCDCDC; }
+  80%  { fill: rgba(0, 0, 0, 0.7); stroke-dashoffset: 0; }
+  95%  { fill: rgba(0, 0, 0, 0.7); stroke: rgba(0, 0, 0, 0.7); }
+  100% { fill: #DCDCDC; stroke-dashoffset: 0; stroke: #f5f5f5; }
+}
+@-moz-keyframes drawlogo {
+  0%   { stroke-dashoffset: 2024; fill: #DCDCDC; stroke: rgba(0, 0, 0, 0.7); }
+  60%  { fill: #DCDCDC; }
+  80%  { fill: rgba(0, 0, 0, 0.7); stroke-dashoffset: 0; }
+  95%  { fill: rgba(0, 0, 0, 0.7); stroke: rgba(0, 0, 0, 0.7); }
+  100% { fill: #DCDCDC; stroke-dashoffset: 0; stroke: #f5f5f5; }
+}
+@-o-keyframes drawlogo {
+  0%   { stroke-dashoffset: 2024; fill: #DCDCDC; stroke: rgba(0, 0, 0, 0.7); }
+  60%  { fill: #DCDCDC; }
+  80%  { fill: rgba(0, 0, 0, 0.7); stroke-dashoffset: 0; }
+  95%  { fill: rgba(0, 0, 0, 0.7); stroke: rgba(0, 0, 0, 0.7); }
+  100% { fill: #DCDCDC; stroke-dashoffset: 0; stroke: #f5f5f5; }
+}
+@keyframes pulse {
+  50%   { opacity: .3; }
+}
+
+#coursera-loading-text h3, #coursera-loading-text h4 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+#coursera-animated-logo circle {
+  fill: rgba(0, 0, 0, 0.7);
+  stroke: rgba(0, 0, 0, 0.7);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 2024 2024;
+  animation:         drawlogo 2s infinite ease-in-out; /* IE 10+, Fx 29+ */
+  -webkit-animation: drawlogo 2s infinite ease-in-out; /* Safari 4+ */
+  -moz-animation:    drawlogo 2s infinite ease-in-out; /* Fx 5+ */
+  -o-animation:      drawlogo 2s infinite ease-in-out; /* Opera 12+ */
+  /*animation:      pulse 2s infinite ease-in-out;  Opera 12+ */
+}
+.coursera-loading-quote, #coursera-loading-text {
+  width: 100%;
+  text-align: center;
+}
+
+#coursera-loading-text h3 {
+  font-size: 1.4em;
+  margin-bottom: 40px;
+  font-weight: normal;
+}
+
+.coursera-loading-quote-byline {
+  font-size: 1em;
+  text-align: center;
+  color: #7f7f7f;
+}
+body{
+    background-image: url('slide.jpg');
+}
+h1, h2, svg{
+    top:40%;
+    left:30%;
+    position: relative;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+</style>
+</head>
+<body>
+
+<h1> We will Be Here Soon</h1>
+<h2> BE AN AFFILIATE SEE MORE DETAILS AT <a href="https://ipayafrica.com">https://ipayafrica.com</a></h2>
+<svg id="coursera-animated-logo" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="150" height="150" xml:space="preserve" viewBox="-5 0 450 223.727"><circle stroke="#4089c8" stroke-width="4.3" fill="#DCDCDC" r="50" cx="120" cy="120"></circle></svg>
+<!--<svg id="coursera-animated-logo" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1000px" height="800px" xml:space="preserve" viewBox="-5 0 450 223.727"><line stroke="#4089c8" stroke-width="4.3" x1="10" y1="120" x2="120" y2="120"></line></svg>-->
+
+</body>
+</html>

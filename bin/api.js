@@ -115,29 +115,33 @@ module.exports = function(express){
             }).
             then(function(updated){
                         
-                    if(paymentstatus == true && updated > 0){ //if true trigger a call to the billing API
-                        console.log(paymentstatus+"payment status")
+                    //if(paymentstatus == true && updated > 0){ //if true trigger a call to the billing API
+                    if(updated > 0){ //if true trigger a call to the billing API
                         var paystring ={};
-                        paystring.biller_name = data.p1;
-                        paystring.account =  data.p2;
-                        paystring.phone = data.msisdn_id;
-                        paystring.amount = data.p4 ;
+                        paystring.biller_name = getvars.p1;
+                        paystring.account =  getvars.p2;
+                        paystring.phone = getvars.msisdn_idnum;
+                        paystring.amount = getvars.mc ;
                         paystring.vid = 'demo'
                         var forpaystring  = bill.paybill(paystring);
-                        return requester.$http(forpaystring,'/ipay-billing/create', 'apis.ipayafrica.com', headers)                
+                        // '/ipay-billing/create' original
+                        console.log(paystring);
+                        console.log(forpaystring);
+                        return requester.$http(forpaystring,'/ipay-billing/sandbox/create', 'apis.ipayafrica.com', headers)                
                             
                     }else if(paymentstatus !== true){ //Else lenga story and display the transaction failed
                         console.log(paymentstatus+"payment status")
                            
-                      throw {error:{'name':paymentstatus,'text':"The transaction payment status is "+paymentstatus+" Therefore the account has not been credited"}};                                                                         
+                      throw {error:{'name':paymentstatus,'text':"The transaction payment status is "+paymentstatus+" Therefore the account for "+getvars.p1+" has not been credited "}};                                                                         
                     }//end of the if                                                      
-                }).then(function (success) {//returned promise from requeter.$http()
-                    success =  success.msg;
-                    var formupdate = { status_message : success.msg};      
+                }).then(function (successful) {//returned promise from requeter.$http()
+                    success =  successful.msg;
+                    var formupdate = { status_message : successful.msg};      
                     return db.updatequery(con,formupdate,'billing_orders',ipnstring.id);
                 }).then(function(updated){
                     if(updated > 0){
-                     res.redirect('/?fl='+ipnstring.id+"&su")
+                    var base64 = new Buffer(JSON.stringify(success)).toString('base64');
+                     res.redirect('/?fl='+ipnstring.id+"&su="+base64);
                     }else{
                       throw {error:{'name':'404','text':"Could Not Update the Transaction status"}}; 
                     }
