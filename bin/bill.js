@@ -20,6 +20,31 @@ module.exports ={
        hmac.update(data);
        return hmac.digest('hex');
     },
+    webpay: function(data, id, host){
+         var qrstring = {
+            live :'1',
+            oid :id,
+            inv :id+data.account,
+            ttl :data.amount,
+            tel :data.tel,
+            eml :data.eml,
+            vid :'ipaybilling',
+            curr :'KES',
+            p1 :data.biller,
+            p2 :data.account,
+            p3 :data.category,
+            p4 :data.amount,
+            cbk :host+'ipn',
+            cst :'1',
+            crl :'0' }
+      var hash = require('./hash.js'); //generate hash
+      var key = '&*etrs#21)o!';//&*etrs#21)o!
+      var datastring = qrstring.live+qrstring.oid+qrstring.inv+qrstring.ttl+qrstring.tel+qrstring.eml+qrstring.vid+qrstring.curr+qrstring.p1+qrstring.p2+qrstring.p3+qrstring.p4+qrstring.cbk+qrstring.cst+qrstring.crl;
+    //   var datastring = qrstring.live+qrstring.oid+qrstring.inv+qrstring.ttl+qrstring.tel+qrstring.eml+qrstring.vid+qrstring.curr+qrstring.p1+qrstring.p2+qrstring.p3+qrstring.p4+qrstring.cst+qrstring.cbk;
+      var hashid = hash.hash_hmac(datastring, 'sha1', key);
+      qrstring.hsh = hashid;
+      return qrstring;
+    },
     restpay: function(data, id){
       var start = new Date().getTime();
      //assign other parameters that iPay needs to the data object in this manner
@@ -46,32 +71,6 @@ module.exports ={
       var hashid = hash.hash_hmac(datastring, 'sha256', key);
       data.hash = hashid;
       return data;
-    },
-    webpay: function(data, id, host){
-         var qrstring = {
-            live :'0',
-            oid :id,
-            inv :id+data.account,
-            ttl :data.amount,
-            tel :data.tel,
-            eml :data.eml,
-            vid :'ipaybilling',
-            curr :'KES',
-            p1 :data.biller,
-            p2 :data.account,
-            p3 :data.category,
-            p4 :data.amount,
-            cbk :host+'ipn',
-            cst :'1',
-            crl :'0' }
-      var hash = require('./hash.js'); //generate hash
-      var key = '&*etrs#21)o!';//&*etrs#21)o!
-      var datastring = qrstring.live+qrstring.oid+qrstring.inv+qrstring.ttl+qrstring.tel+qrstring.eml+qrstring.vid+qrstring.curr+qrstring.p1+qrstring.p2+qrstring.p3+qrstring.p4+qrstring.cbk+qrstring.cst+qrstring.crl;
-    //   var datastring = qrstring.live+qrstring.oid+qrstring.inv+qrstring.ttl+qrstring.tel+qrstring.eml+qrstring.vid+qrstring.curr+qrstring.p1+qrstring.p2+qrstring.p3+qrstring.p4+qrstring.cst+qrstring.cbk;
-      var hashid = hash.hash_hmac(datastring, 'sha1', key);
-      qrstring.hsh = hashid;
-      console.log(qrstring);
-      return qrstring;
     },
     ipaymobile: function(data){
        //generate hash
