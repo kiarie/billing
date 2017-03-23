@@ -24,7 +24,7 @@ module.exports ={
       var start = new Date().getTime();
      //assign other parameters that iPay needs to the data object in this manner
     //  console.log(id);
-      data.live = '0';
+      data.live = '1';
       data.oid = id;                                             
       data.inv = id+data.account; 
       data.vid = 'ipaybilling';//ipaybilling
