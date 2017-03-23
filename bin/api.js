@@ -74,7 +74,6 @@ module.exports = function(express){
                         querystr = querystring.stringify(ipaystring);                    
                     console.log(querystr);                                  
                     return res.redirect(url+querystr);
-
                 }).catch(function(error) {
                     console.log(error)
                     var exists = fs.readFile(`billing/error.html`)
@@ -119,19 +118,20 @@ module.exports = function(express){
             }).
             then(function(updated){
                         
-                    //if(paymentstatus == true && updated > 0){ //if true trigger a call to the billing API
-                    if(updated > 0){ //if true trigger a call to the billing API
+                    if(paymentstatus == true && updated > 0){ //if true trigger a call to the billing API
+                    // if(updated > 0){ //if true trigger for test call to the billing API
                         var paystring ={};
                         paystring.biller_name = getvars.p1;
                         paystring.account =  getvars.p2;
                         paystring.phone = getvars.msisdn_idnum;
                         paystring.amount = getvars.mc ;
-                        paystring.vid = 'demo'
+                        paystring.vid = 'ipaybilling'; //ipaybilling
                         var forpaystring  = bill.paybill(paystring);
                         // '/ipay-billing/create' original
                         console.log(paystring);
                         console.log(forpaystring);
-                        return requester.$http(forpaystring,'/ipay-billing/sandbox/create', 'apis.ipayafrica.com', headers)                
+                        return requester.$http(forpaystring,'/ipay-billing/create', 'apis.ipayafrica.com', headers)   
+                        // return requester.$http(forpaystring,'/ipay-billing/sandbox/create', 'apis.ipayafrica.com', headers)                
                             
                     }else if(paymentstatus !== true){ //Else lenga story and display the transaction failed
                         console.log(paymentstatus+"payment status")

@@ -113,16 +113,19 @@
     }
 //this clones the links for use in mobile view
 	var offcanvasMenu = function() {
-        var elem = _$('div');
-        elem.id = "fh5co-offcanvas";
-        document.body.insertBefore(elem, null);
-		var a = _$('a');
-        a.classList.add("js-fh5co-nav-toggle");
+        var elem = _$('div');//create Div element
+        elem.id = "fh5co-offcanvas"; //Add an id attribute to it
+        document.body.insertBefore(elem, null); //insert in the document body before all else
+		var a = _$('a'); //create an anchor tag
+        a.classList.add("js-fh5co-nav-toggle"); //add a class to it
         a.classList.add("fh5co-nav-toggle");
-        a.appendChild(_$('i'));
+        a.appendChild(_$('i'));		//add that created i tag element this is the open and close icon the three bars
 
-        document.body.insertBefore(a, null);		
-		
+        document.body.insertBefore(a, null);//insert it to DOM	
+		var home = _$('div')
+		home.classList.add("side-nav-header");
+		home.appendChild(document.querySelector('.header-inner a').cloneNode(true));
+		document.querySelector('#fh5co-offcanvas').appendChild(home)
         document.querySelector('#fh5co-offcanvas').
         appendChild(document.querySelector('#fh5co-header nav').cloneNode(true));
 	};

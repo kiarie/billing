@@ -1443,7 +1443,7 @@ h1, h2, h3, h4, h5, h6, figure {
   height: 100%;
   right: 0;
   overflow-y: auto;
-  position: absolute;
+  position: fixed;
   z-index: 3;
   text-align: center;
   top: 0;
@@ -1454,6 +1454,20 @@ h1, h2, h3, h4, h5, h6, figure {
   -webkit-transition: 0.5s;
   -o-transition: 0.5s;
   transition: 0.5s;
+}
+.side-nav-header{
+    display: block;
+    height: 37%;
+    margin: -30px;
+    background-image: url(../images/slide_6.jpg);
+    text-decoration: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding-top: 48%;
+    font-size: xx-large;
+    color: white;
+    font-weight: 700;
+
 }
 @media screen and (max-width: 768px) {
 

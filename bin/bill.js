@@ -11,7 +11,7 @@ module.exports ={
         Object.keys(data).sort().map((k) =>{
             datastring[k] = data[k]; 
         });
-        var key = 'demo';      
+        var key = '&*etrs#21)o!';//&*etrs#21)o!      
         data.hash = hash.hash_hmac(querystring.stringify(datastring), 'sha256', key);
         return data;         
     },
@@ -27,7 +27,7 @@ module.exports ={
       data.live = '0';
       data.oid = id;                                             
       data.inv = id+data.account; 
-      data.vid = 'demo';
+      data.vid = 'ipaybilling';//ipaybilling
       data.curr = 'KES';
       data.p1 = data.biller;
       data.p2 = data.account;
@@ -40,7 +40,7 @@ module.exports ={
       delete data.account;
       delete data.category;
       delete data.biller;
-      var key = 'demo';
+      var key = '&*etrs#21)o!'; //&*etrs#21)o!
                  //    data.live+data.oid+data.inv+data.amount+data.tel+data.eml+data.vid+data.curr+data.p1+data.p2+data.p3+data.p4+data.cst+data.cbk;  
       var datastring = data.live+data.oid+data.inv+data.amount+data.tel+data.eml+data.vid+data.curr+data.p1+data.p2+data.p3+data.p4+data.cst+data.cbk;
       var hashid = hash.hash_hmac(datastring, 'sha256', key);
@@ -55,7 +55,7 @@ module.exports ={
             ttl :data.amount,
             tel :data.tel,
             eml :data.eml,
-            vid :'demo',
+            vid :'ipaybilling',
             curr :'KES',
             p1 :data.biller,
             p2 :data.account,
@@ -65,7 +65,7 @@ module.exports ={
             cst :'1',
             crl :'0' }
       var hash = require('./hash.js'); //generate hash
-      var key = 'demo';
+      var key = '&*etrs#21)o!';//&*etrs#21)o!
       var datastring = qrstring.live+qrstring.oid+qrstring.inv+qrstring.ttl+qrstring.tel+qrstring.eml+qrstring.vid+qrstring.curr+qrstring.p1+qrstring.p2+qrstring.p3+qrstring.p4+qrstring.cbk+qrstring.cst+qrstring.crl;
     //   var datastring = qrstring.live+qrstring.oid+qrstring.inv+qrstring.ttl+qrstring.tel+qrstring.eml+qrstring.vid+qrstring.curr+qrstring.p1+qrstring.p2+qrstring.p3+qrstring.p4+qrstring.cst+qrstring.cbk;
       var hashid = hash.hash_hmac(datastring, 'sha1', key);
