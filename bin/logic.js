@@ -57,8 +57,9 @@ module.exports = {
                     console.log(err);
                     reject(err);
                 }
+                //  console.log(result)
                 resolve(result.affectedRows);
-                console.log(result)
+               
                 // connection.end();                
              });
          });

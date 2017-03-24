@@ -93,7 +93,7 @@ module.exports = function(express){
                 headers={},
                 paymentstatus,
                 configs = db.configs.online,
-                ipnstring = {   vendor: getvars.vendor,
+                ipnstring = {   vendor: VENDOR_ID,
                                 id: getvars.id,
                                 ivm: getvars.ivm,
                                 qwh: getvars.qwh,
@@ -102,13 +102,18 @@ module.exports = function(express){
                                 uyt: getvars.uyt,
                                 ifd: getvars.ifd
                             }
+            console.log(querystring.stringify(ipnstring));
             if(req.hostname == 'localhost') configs = db.configs.local
+            // configs.debug = true;
             var con = db.connection(configs)
-            requester._get('https://www.ipayafrica.com/ipn/'+querystring.stringify(ipnstring)).
+            requester._get('https://www.ipayafrica.com/ipn/?'+querystring.stringify(ipnstring)).
             then(function(success)
              {
                  if(success !== undefined){
+                     console.log("ipn response: "+success)
                     paymentstatus = bill.ipn(success) //returns true or 'status like less, failed, used if not successful'
+                     console.log(paymentstatus);
+                    
                     var formdata = { paid_status : paymentstatus}; 
                             
                     return db.updatequery(con,formdata,'billing_orders',ipnstring.id);
@@ -117,7 +122,7 @@ module.exports = function(express){
                 }//end of the  if
             }).
             then(function(updated){
-                        
+                        console.log(updated)
                     if(paymentstatus == true && updated > 0){ //if true trigger a call to the billing API
                     // if(updated > 0){ //if true trigger for test call to the billing API
                         var paystring ={};
@@ -125,7 +130,7 @@ module.exports = function(express){
                         paystring.account =  getvars.p2;
                         paystring.phone = getvars.msisdn_idnum;
                         paystring.amount = getvars.mc ;
-                        paystring.vid = 'ipaybilling'; //ipaybilling
+                        paystring.vid = VENDOR_ID; //ipaybilling
                         var forpaystring  = bill.paybill(paystring);
                         // '/ipay-billing/create' original
                         console.log(paystring);
@@ -134,11 +139,13 @@ module.exports = function(express){
                         // return requester.$http(forpaystring,'/ipay-billing/sandbox/create', 'apis.ipayafrica.com', headers)                
                             
                     }else if(paymentstatus !== true){ //Else lenga story and display the transaction failed
-                        console.log(paymentstatus+"payment status")
+                        console.log(paymentstatus+" ->payment status")
                            
                       throw {error:{'name':paymentstatus,'text':"The transaction payment status is "+paymentstatus+" Therefore the account for "+getvars.p1+" has not been credited "}};                                                                         
                     }//end of the if                                                      
                 }).then(function (successful) {//returned promise from requeter.$http()
+                        console.log(successful+" ->billing API Response status")
+                    
                     success =  successful.msg;
                     var formupdate = { status_message : successful.msg};      
                     return db.updatequery(con,formupdate,'billing_orders',ipnstring.id);

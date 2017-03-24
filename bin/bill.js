@@ -2,7 +2,8 @@ var crypto = require('crypto');
 var requester = require('./requester.js');
 var hash = require('./hash.js');
 var querystring = require('querystring');
-
+const VENDOR_ID = 'ipaybilling';// or demo
+const HASH_KEY = '&*etrs#21)o!';//&*etrs#21)o!
 module.exports ={
     paybill: function(data){
         var datastring = {};
@@ -28,7 +29,7 @@ module.exports ={
             ttl :data.amount,
             tel :data.tel,
             eml :data.eml,
-            vid :'ipaybilling',
+            vid :VENDOR_ID,
             curr :'KES',
             p1 :data.biller,
             p2 :data.account,
@@ -38,7 +39,7 @@ module.exports ={
             cst :'1',
             crl :'0' }
       var hash = require('./hash.js'); //generate hash
-      var key = '&*etrs#21)o!';//&*etrs#21)o!
+      var key = HASH_KEY;
       var datastring = qrstring.live+qrstring.oid+qrstring.inv+qrstring.ttl+qrstring.tel+qrstring.eml+qrstring.vid+qrstring.curr+qrstring.p1+qrstring.p2+qrstring.p3+qrstring.p4+qrstring.cbk+qrstring.cst+qrstring.crl;
     //   var datastring = qrstring.live+qrstring.oid+qrstring.inv+qrstring.ttl+qrstring.tel+qrstring.eml+qrstring.vid+qrstring.curr+qrstring.p1+qrstring.p2+qrstring.p3+qrstring.p4+qrstring.cst+qrstring.cbk;
       var hashid = hash.hash_hmac(datastring, 'sha1', key);
@@ -52,7 +53,7 @@ module.exports ={
       data.live = '1';
       data.oid = id;                                             
       data.inv = id+data.account; 
-      data.vid = 'ipaybilling';//ipaybilling
+      data.vid = VENDOR_ID;
       data.curr = 'KES';
       data.p1 = data.biller;
       data.p2 = data.account;
@@ -65,7 +66,7 @@ module.exports ={
       delete data.account;
       delete data.category;
       delete data.biller;
-      var key = '&*etrs#21)o!'; //&*etrs#21)o!
+      var key = HASH_KEY;
                  //    data.live+data.oid+data.inv+data.amount+data.tel+data.eml+data.vid+data.curr+data.p1+data.p2+data.p3+data.p4+data.cst+data.cbk;  
       var datastring = data.live+data.oid+data.inv+data.amount+data.tel+data.eml+data.vid+data.curr+data.p1+data.p2+data.p3+data.p4+data.cst+data.cbk;
       var hashid = hash.hash_hmac(datastring, 'sha256', key);
@@ -74,14 +75,14 @@ module.exports ={
     },
     ipaymobile: function(data){
        //generate hash
-      var key = 'demo'
+      var key = HASH_KEY;
       var datastring = data.sid+data.vid;
       var hashid = hash.hash_hmac(datastring, 'sha256', key);
       data.hash = hashid;
       return data;
     },
     ipaycard: function(data, biller){
-      var key = 'demo'
+      var key = HASH_KEY;
       var datastring = data.sid+data.vid+data.cardno+data.cvv+data.month+data.year+data.cust_address+data.cust_city+data.cust_country+data.cust_postcode+data.cust_stateprov+data.fname+data.lname;
       var hashid = hash.hash_hmac(datastring, 'sha256', key);
       data.hash = hashid;
