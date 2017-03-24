@@ -2,6 +2,7 @@ var crypto = require('crypto');
 var requester = require('./requester.js');
 var hash = require('./hash.js');
 var querystring = require('querystring');
+const VENDOR_ID = 'ipaybilling';
 const HASH_KEY = '&*etrs#21)o!';//&*etrs#21)o!
 module.exports ={
     vendor_id:VENDOR_ID,
