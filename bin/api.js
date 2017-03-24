@@ -93,7 +93,7 @@ module.exports = function(express){
                 headers={},
                 paymentstatus,
                 configs = db.configs.online,
-                ipnstring = {   vendor: VENDOR_ID,
+                ipnstring = {   vendor: vendor_id,
                                 id: getvars.id,
                                 ivm: getvars.ivm,
                                 qwh: getvars.qwh,
@@ -130,7 +130,7 @@ module.exports = function(express){
                         paystring.account =  getvars.p2;
                         paystring.phone = getvars.msisdn_idnum;
                         paystring.amount = getvars.mc ;
-                        paystring.vid = VENDOR_ID; //ipaybilling
+                        paystring.vid = vendor_id; //ipaybilling
                         var forpaystring  = bill.paybill(paystring);
                         // '/ipay-billing/create' original
                         console.log(paystring);

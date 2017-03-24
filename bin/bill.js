@@ -2,10 +2,11 @@ var crypto = require('crypto');
 var requester = require('./requester.js');
 var hash = require('./hash.js');
 var querystring = require('querystring');
-const VENDOR_ID = 'ipaybilling';// or demo
 const HASH_KEY = '&*etrs#21)o!';//&*etrs#21)o!
 module.exports ={
+    vendor_id:VENDOR_ID,
     paybill: function(data){
+        
         var datastring = {};
         /*Object keys to get an Array for the keys then we sort and iterate the datastring object
         * with the map function and put values in the sorted order */ 
