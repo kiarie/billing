@@ -85,27 +85,25 @@
 
 //hide/open mobile nav
 	var mobileMenuOutsideClick = function() {
-        // var container = document.querySelectorAll("#fh5co-offcanvas, .js-fh5co-nav-toggle")
-        // document.addEventListener('click', function(evt){
-        //             container.classList.remove('fadeInUp');
-        //             container.classList.remove('animated');
-        //             container.style = 'display:none';
-        //             console.log('kumbe')
-        //         });
-		$(document).click(function (e) {
-	    var container = $("#fh5co-offcanvas, .js-fh5co-nav-toggle");
-	    if (!container.is(e.target) && container.has(e.target).length === 0) {
+      
+        document.addEventListener('click', function(evt){
+			var container = document.querySelector('.js-fh5co-nav-toggle');
+			if(evt.target !== container && evt.target !== container.querySelector('i')){
+				restructure()
+				}//endif
+		});	
+		// $(document).click(function (e) {
+	    // var container = $("#fh5co-offcanvas, .js-fh5co-nav-toggle");
+	    // if (!container.is(e.target) && container.has(e.target).length === 0) {
 
-	    	if ( $('body').hasClass('offcanvas-visible') ) {
+	    // 	if ( $('body').hasClass('offcanvas-visible') ) {
 
-    			$('body').removeClass('offcanvas-visible');
-    			$('.js-fh5co-nav-toggle').removeClass('active');
+    	// 		$('body').removeClass('offcanvas-visible');
+    	// 		$('.js-fh5co-nav-toggle').removeClass('active');
 				
-	    	}
-	    
-	    	
-	    }
-		});
+	    // 	}
+	    // }
+		// });
 
 	};
     var _$ = function(elem){
