@@ -62,12 +62,12 @@ function _get(pathname, callback) {
         var loader = document.createElement('img');
         if (xhr.readyState == 1) {
 
-            loader.src = "images/loader.gif";
+            loader.src = "images/loading.gif";
             loader.id = "loader"
             loader.style.position = "fixed";
             loader.style.zIndex = "1000";
-            loader.style.top = "34%";
-            loader.style.left = "49%";
+            loader.style.top = "44%";
+            loader.style.left = "48%";
 
             document.body.appendChild(loader);
 
@@ -102,12 +102,12 @@ function _getAjx(pathname) {
             var loader = document.createElement('img');
             if (xhr.readyState == 1) {
 
-                loader.src = "images/loader.gif";
+                loader.src = "images/loading.gif";
                 loader.id = "loader"
                 loader.style.position = "fixed";
                 loader.style.zIndex = "1000";
-                loader.style.top = "34%";
-                loader.style.left = "49%";
+                loader.style.top = "44%";
+                loader.style.left = "48%";
 
                 document.body.appendChild(loader);
 
@@ -183,6 +183,32 @@ function _onChange() {
 
 }
 //this is the one that renders the request for payment form bind it so that it works
+/**
+ * 
+ */
+function _loading(){
+    if(document.readyState == 'interactive')
+    {
+        Array.from(document.querySelectorAll('.btn')).map(function(btn){
+	                btn.disabled = true;
+                    console.log(btn)
+                });
+        var loader = document.createElement('img');
+                loader.src = "images/loading.gif";
+                loader.id = "loader"
+                loader.style.position = "fixed";
+                loader.style.zIndex = "1000";
+                loader.style.top = "44%";
+                loader.style.left = "48%";
+
+                document.body.appendChild(loader);
+
+            }
+    if (document.readyState == 'complete') {
+        document.body.removeChild(document.getElementById('loader'))
+    }
+    
+}
 function showform() {
     var payfor = document.querySelectorAll('.fh5co-property-innter a,.fh5co-property-specification a');
     //console.log(payfor);
@@ -232,6 +258,7 @@ function postforms(evt) {
     var form = evt.target;//the element that triggers the event
     //can define variables in one comma seperated line in javascript awesome!! below
     //console.log(form)
+
     var path = form.action, formdata = new FormData(form), jsons = {};
     //iterate object make an array out of it and map each element to the jsons object notation
     Array.from(formdata.entries()).map(function (f) {
@@ -276,7 +303,13 @@ function formvalid(evt) {
         addClass(form.account.parentElement.parentElement, 'has-error');
         form.account.focus(); return false;
     } else {
-        evt.target.submit();
+        var btn = evt.target.querySelector('.btn-success');
+            btn.disabled = true;
+            btn.style.backgroundImage = "url('images/loading-btn.gif')";
+            btn.style.backgroundRepeat = "no-repeat";
+            btn.style.backgroundSize = "contain";
+          
+            evt.target.submit();
         //postforms(evt);//submit the from if everything else is okay   this was the Ajax way        
     }
 
@@ -429,6 +462,7 @@ window.addEventListener('DOMContentLoaded', load);//when initial DOM is loaded u
 window.addEventListener('DOMContentLoaded', getLinks);//when initial DOM is loaded
 window.addEventListener('hashchange', _onChange);//when the hash changes
 window.addEventListener('load', _onalert);
+document.addEventListener('readystatechange', _loading)
 
         /**
 0	UNSENT	Client has been created. open() not called yet.
