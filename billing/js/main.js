@@ -175,7 +175,15 @@
 			} );
 		}
 	};
-
+	var getFullYear = function()
+	{
+		var date = new Date(),
+			fullyear = date.getFullYear();
+		var copyright_div = document.body.querySelector('.fh5co-copyright > p');
+		var $copy = document.createTextNode(fullyear);
+		copyright_div.appendChild($copy)
+		console.log(fullyear)
+	}
 
 
 	var contentWayPoint = function() {
@@ -225,6 +233,7 @@
 		burgerMenu();
 		toggleBtnColor();
 		contentWayPoint();
+		getFullYear();
 	});
 
 
