@@ -1457,8 +1457,8 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 .side-nav-header{
     display: block;
-    height: 37%;
-    /*margin: -30px;*/
+    /*height: 30%;
+    margin: -30px;*/
     background-image: url(../images/slide_6.jpg);
     text-decoration: none;
     background-repeat: no-repeat;
