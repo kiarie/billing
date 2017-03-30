@@ -1450,7 +1450,7 @@ h1, h2, h3, h4, h5, h6, figure {
   width: 256px;
   left: -257px;
   background: black;
-  padding: 30px;
+  /*padding: 30px;*/
   -webkit-transition: 0.5s;
   -o-transition: 0.5s;
   transition: 0.5s;
@@ -1458,7 +1458,7 @@ h1, h2, h3, h4, h5, h6, figure {
 .side-nav-header{
     display: block;
     height: 37%;
-    margin: -30px;
+    /*margin: -30px;*/
     background-image: url(../images/slide_6.jpg);
     text-decoration: none;
     background-repeat: no-repeat;
@@ -1473,7 +1473,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 }
 #fh5co-offcanvas ul {
-  padding: 0;
+  padding: 5px 60px;
   margin: 0;
 }
 #fh5co-offcanvas ul li {
