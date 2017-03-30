@@ -4,6 +4,14 @@ var addclasses = function(elem,classes){
 			elem.classList.add(cl);
 		})
     }
+function promiseHelpers()
+{
+    if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
+        var script = document.createElement('script')
+        script.src = 'js/promise-poly.js';
+        document.querySelector('head').appendChild(script)
+}
+}
 function load() {
 
     //console.log("load event detected!");
@@ -163,35 +171,29 @@ function getLinks() {
  * to this cards
  */
 function listings(){
-		var category_list = document.querySelector('#fh5co-testimonial .row');
+		var category_list = document.querySelector('#best-deal .row');
 		Array.from(document.querySelectorAll('#fh5co-offcanvas ul li a')).map(function(li){
 			if(li.href.substr(-8)!== '#contact' && li.href.substr(0,3) !=='tel' ){
                 
 				var listing = document.createElement('div'),
                     img = document.createElement('img')
                 img.src = 'images/billing_images/'+li.href.split('#')[1]+'.png';
-                img.height = '240';
-                // img.width = '320';
+                img.maxHeight = '240';
+            
                 addClass(img, 'img-responsive')
+				addclasses(listing, "col-md-4 item-block animated fadeInUp");
+				 var blockquote  = document.createElement('div');
+				 addClass(blockquote, "fh5co-property")
+               	var figure = document.createElement('figure');
+					figure.appendChild(img);
+                    figure.style.backgroundImage = 'url(images/slide_2.jpg)';
+				var inner = document.createElement('div');
+                    addClass(inner, 'fh5co-property-innter')
+                    theTpl = '<h2>'+li.innerHTML+'</h2><a href="'+li.href+'">'+li.innerHTML+'</a>'
+                    inner.innerHTML = theTpl;
+					blockquote.appendChild(figure);
+					blockquote.appendChild(inner);
 
-                // listing.appendChild(img)
-				addclasses(listing, "col-md-4 text-center item-block animate-box");
-				 var blockquote  = document.createElement('blockquote');
-				 
-               	var text = document.createElement('h2'),
-					actualText = document.createTextNode(li.innerHTML)
-					text.appendChild(actualText);
-				// var inner = document.createElement('p')
-				// 	inner.innerHTML ='See the available Options';
-                var anchor = document.createElement('a')
-                    anchor.href = li.href;
-                    // anchor.innerHTML = 'Go Make a Purchase';
-                    // addclasses(anchor, 'btn btn-primary')
-					anchor.appendChild(text);
-                    anchor.appendChild(img)
-                    // blockquote.appendChild(inner);
-                    blockquote.appendChild(anchor)
-                    listing.background = "#c5d6e6"
                     listing.appendChild(blockquote)
 				category_list.appendChild(listing)
 				}
