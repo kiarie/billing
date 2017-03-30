@@ -34,7 +34,7 @@ function load() {
             // //console.log(html);
         });
         getLinks();
-        listings();
+        // listings();
 
     }, function (error) {
         var rdata = JSON.parse(error);
@@ -170,35 +170,35 @@ function getLinks() {
  * it gets the anchors in the top header and then copies the getLinks
  * to this cards
  */
-function listings(){
-		var category_list = document.querySelector('#best-deal .row');
-		Array.from(document.querySelectorAll('#fh5co-offcanvas ul li a')).map(function(li){
-			if(li.href.substr(-8)!== '#contact' && li.href.substr(0,3) !=='tel' ){
+// function listings(){
+// 		var category_list = document.querySelector('#best-deal .row');
+// 		Array.from(document.querySelectorAll('#fh5co-offcanvas ul li a')).map(function(li){
+// 			if(li.href.substr(-8)!== '#contact' && li.href.substr(0,3) !=='tel' ){
                 
-				var listing = document.createElement('div'),
-                    img = document.createElement('img')
-                img.src = 'images/billing_images/'+li.href.split('#')[1]+'.png';
-                img.maxHeight = '240';
+// 				var listing = document.createElement('div'),
+//                     img = document.createElement('img')
+//                 img.src = 'images/billing_images/'+li.href.split('#')[1]+'.png';
+//                 img.maxHeight = '240';
             
-                addClass(img, 'img-responsive')
-				addclasses(listing, "col-md-4 item-block animated fadeInUp");
-				 var blockquote  = document.createElement('div');
-				 addClass(blockquote, "fh5co-property")
-               	var figure = document.createElement('figure');
-					figure.appendChild(img);
-                    figure.style.backgroundImage = 'url(images/slide_2.jpg)';
-				var inner = document.createElement('div');
-                    addClass(inner, 'fh5co-property-innter')
-                    theTpl = '<h2>'+li.innerHTML+'</h2><a href="'+li.href+'">'+li.innerHTML+'</a>'
-                    inner.innerHTML = theTpl;
-					blockquote.appendChild(figure);
-					blockquote.appendChild(inner);
+//                 addClass(img, 'img-responsive')
+// 				addclasses(listing, "col-md-4 item-block animated fadeInUp");
+// 				 var blockquote  = document.createElement('div');
+// 				 addClass(blockquote, "fh5co-property")
+//                	var figure = document.createElement('figure');
+// 					figure.appendChild(img);
+//                     figure.style.backgroundImage = 'url(images/slide_2.jpg)';
+// 				var inner = document.createElement('div');
+//                     addClass(inner, 'fh5co-property-innter')
+//                     theTpl = '<h2>'+li.innerHTML+'</h2><a href="'+li.href+'">'+li.innerHTML+'</a>'
+//                     inner.innerHTML = theTpl;
+// 					blockquote.appendChild(figure);
+// 					blockquote.appendChild(inner);
 
-                    listing.appendChild(blockquote)
-				category_list.appendChild(listing)
-				}
-		})
-	}
+//                     listing.appendChild(blockquote)
+// 				category_list.appendChild(listing)
+// 				}
+// 		})
+// 	}
 /**
  * @func _onChange
  * function to enact change of content
