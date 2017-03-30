@@ -24,7 +24,6 @@
 			return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
 		}
 	};
-
 	var fullHeight = function() {
 
 		if ( !isMobile.any() ) {
@@ -126,6 +125,7 @@
 		document.querySelector('#fh5co-offcanvas').appendChild(home)
         document.querySelector('#fh5co-offcanvas').
         appendChild(document.querySelector('#fh5co-header nav').cloneNode(true));
+		
 	};
 
     
@@ -178,11 +178,10 @@
 	var getFullYear = function()
 	{
 		var date = new Date(),
-			fullyear = date.getFullYear();
-		var copyright_div = document.body.querySelector('.fh5co-copyright > p');
-		var $copy = document.createTextNode(fullyear);
+			fullyear = date.getFullYear(),
+			copyright_div = document.body.querySelector('.fh5co-copyright > p'),
+			$copy = document.createTextNode(fullyear);
 		copyright_div.appendChild($copy)
-		console.log(fullyear)
 	}
 
 

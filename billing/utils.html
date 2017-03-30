@@ -3,7 +3,11 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 animate-box">
+				{{#ifEq name "airtime"}}
 				<h1><span class="colored">Buy {{name}}</span> with iPay</h1>
+				{{else}}
+				<h1><span class="colored">Pay For {{name}}</span> with iPay</h1>				
+				{{/ifEq}}
 			</div>
 		</div>
 	</div>

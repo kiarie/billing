@@ -1,3 +1,9 @@
+var addclasses = function(elem,classes){
+		var cls = classes.trimRight(" ").split(" ");
+		cls.map(function(cl){
+			elem.classList.add(cl);
+		})
+    }
 function load() {
 
     //console.log("load event detected!");
@@ -20,6 +26,7 @@ function load() {
             // //console.log(html);
         });
         getLinks();
+        listings();
 
     }, function (error) {
         var rdata = JSON.parse(error);
@@ -151,6 +158,46 @@ function getLinks() {
     });
 }
 /**
+ * List Cards of the Categories e.g Airtime, Electricity
+ * it gets the anchors in the top header and then copies the getLinks
+ * to this cards
+ */
+function listings(){
+		var category_list = document.querySelector('#fh5co-testimonial .row');
+		Array.from(document.querySelectorAll('#fh5co-offcanvas ul li a')).map(function(li){
+			if(li.href.substr(-8)!== '#contact' && li.href.substr(0,3) !=='tel' ){
+                
+				var listing = document.createElement('div'),
+                    img = document.createElement('img')
+                img.src = 'images/billing_images/'+li.href.split('#')[1]+'.png';
+                img.height = '240';
+                // img.width = '320';
+                addClass(img, 'img-responsive')
+
+                // listing.appendChild(img)
+				addclasses(listing, "col-md-4 text-center item-block animate-box");
+				 var blockquote  = document.createElement('blockquote');
+				 
+               	var text = document.createElement('h2'),
+					actualText = document.createTextNode(li.innerHTML)
+					text.appendChild(actualText);
+				// var inner = document.createElement('p')
+				// 	inner.innerHTML ='See the available Options';
+                var anchor = document.createElement('a')
+                    anchor.href = li.href;
+                    // anchor.innerHTML = 'Go Make a Purchase';
+                    // addclasses(anchor, 'btn btn-primary')
+					anchor.appendChild(text);
+                    anchor.appendChild(img)
+                    // blockquote.appendChild(inner);
+                    blockquote.appendChild(anchor)
+                    listing.background = "#c5d6e6"
+                    listing.appendChild(blockquote)
+				category_list.appendChild(listing)
+				}
+		})
+	}
+/**
  * @func _onChange
  * function to enact change of content
 */
@@ -191,7 +238,7 @@ function _loading(){
     {
         Array.from(document.querySelectorAll('.btn')).map(function(btn){
 	                btn.disabled = true;
-                    console.log(btn)
+                    // console.log(btn)
                 });
         var loader = document.createElement('img');
                 loader.src = "images/loading.gif";

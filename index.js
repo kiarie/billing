@@ -7,7 +7,16 @@ var requester = require('./bin/requester'),
     db = require('./bin/logic'),
   port = process.env.PORT || 3000;
 
-
+/**
+ * Registering a Handlebars Custom Helper
+ * our own helper to check for equality (or inequality).
+ */
+handlebars.registerHelper('ifEq', function(a,b,opt){
+  if(a === b){
+    return opt.fn(this)
+  }
+  return opt.inverse(this)
+})
 // apply the routes to our application
 
 
