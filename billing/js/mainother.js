@@ -4,15 +4,7 @@ var addclasses = function(elem,classes){
 			elem.classList.add(cl);
 		})
     }
-// function promiseHelpers()
-// {
-//     if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
-//         var script = document.createElement('script')
-//         script.src = 'js/promise-poly.js';
-//         document.querySelector('head').appendChild(script)
-//         alert()
-//     }
-// }
+
 function load() {
 
     //console.log("load event detected!");
@@ -24,7 +16,7 @@ function load() {
      inorder to iterate with them all running the reqiured functions on them
    */
 
-    _getAjx('/list').then(function (data) {
+    _get('/list' ,function (data) {
         var rdata = JSON.parse(data);
         var context = { items: rdata };
         var html = template(context);
@@ -61,17 +53,22 @@ function ajx(e) {
     //console.log(tar);
     var slide = document.getElementById('slid');
     var response;
-    _get(tar, function (res) {
+    _get(`partial/${tar}`, function (res) {
         response = res;
         slide.innerHTML = res;
         return response
     });
 }
-function _get(pathname, callback) {
+function _get(pathname, callback, errorcallback) {
     var xhr = new XMLHttpRequest();
     // var loaded;
     xhr.onload = function (evt) {
-        callback(this.response);
+         if (xhr.status === 200) {
+                callback(this.response);
+            } else {
+                errorcallback(this.response);
+            }
+        
         showform();//list the billing options available
     }
     xhr.onreadystatechange = function () {
@@ -94,50 +91,12 @@ function _get(pathname, callback) {
 
         }
     }
-    xhr.open('GET', `partial/${pathname}`);
+    xhr.open('GET', `${pathname}`);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
     xhr.send();
 
 }
-/**
- * @funct _getAjx
- * function to return a get request as a promise so we can
- * use it in other functions.
- */
-function _getAjx(pathname) {
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function (evt) {
-            if (xhr.status === 200) {
-                resolve(this.response)
-            } else {
-                reject(this.response);
-            }
-        }
-        xhr.onreadystatechange = function () {
-            var loader = document.createElement('img');
-            if (xhr.readyState == 1) {
 
-                loader.src = "images/loading.gif";
-                loader.id = "loader"
-                loader.style.position = "fixed";
-                loader.style.zIndex = "1000";
-                loader.style.top = "44%";
-                loader.style.left = "48%";
-
-                document.body.appendChild(loader);
-
-            }
-            if (xhr.readyState == 4) {
-                document.body.removeChild(document.getElementById('loader'))
-            }
-        }
-        xhr.onerror = reject;
-        xhr.open('GET', `${pathname}`);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-        xhr.send();
-    });
-}
 /**
  * @func _post
  * My own custom post ajax functions that returns a promise
@@ -207,9 +166,11 @@ function getLinks() {
 function _onChange() {
     var paths = window.location.hash.substring(1), pathname = paths.split('/');
     var slide = document.getElementById('slid');
+        console.log(`/partial/${paths}`)
+    
     if (paths !== '') {
-        _getAjx(`/partial/${paths}`).
-            then(function (response) {
+                _get(`/partial/${paths}`,function (response) {
+
                 slide.innerHTML = response;
                 if (pathname[1] === 'payments') {
                     var biller = pathname[0];
@@ -222,7 +183,7 @@ function _onChange() {
                 if(document.body.scrollTop !== 0){
                     window.scroll(0,100);
                 }
-            }).catch(function (error) {
+            },function (error) {
                 window.history.back();
                 //console.log(error)
             })
@@ -508,7 +469,6 @@ function setValidity(text, formgroup)
 //atob(location.search.split('&')[1].split('=')[1])
 
 window.addEventListener('DOMContentLoaded', _onChange);//promiseHelpers
-window.addEventListener('DOMContentLoaded', promiseHelpers);
 window.addEventListener('DOMContentLoaded', load);//when initial DOM is loaded useful!!
 window.addEventListener('DOMContentLoaded', getLinks);//when initial DOM is loaded
 window.addEventListener('hashchange', _onChange);//when the hash changes

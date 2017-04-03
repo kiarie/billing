@@ -240,9 +240,19 @@
             </script>
 	
 	<!-- jQuery -->
-	<script src="//cdn.jsdelivr.net/bluebird/3.5.0/bluebird.min.js"></script>
+	<!--<script>
+	  var script = document.createElement('script')
+		if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
+        script.src = 'js/bills.js';
+		document.body.appendChild(script)
+    	}else{
+		script.src = 'js/mainother.js';
+		document.body.appendChild(script)
+		alert('hello')	
+		}
+	</script>-->
 
-    <script src="js/bills.js"></script>
+    <script src="js/mainother.js"></script>
 	
     <script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/handlebars.js"></script>
