@@ -4,24 +4,15 @@ var addclasses = function(elem,classes){
 			elem.classList.add(cl);
 		})
     }
-// function promiseHelpers()
-// {
-//     if (Modernizr.promises) {
-//   // supported
-//   return true
-// } else {
-    
-//         var script = document.createElement('script')
-//         script.src = 'js/promise-poly.js';
-//         document.body('head').appendChild(script)
-//         alert('iko');
-// }
-//     if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
-//         var script = document.createElement('script')
-//         script.src = 'js/promise-poly.js';
-//         document.querySelector('head').appendChild(script)
-// }
-// }
+function promiseHelpers()
+{
+    if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
+        var script = document.createElement('script')
+        script.src = 'js/promise-poly.js';
+        document.querySelector('head').appendChild(script)
+        alert('skskskskk')
+}
+}
 function load() {
 
     //console.log("load event detected!");
@@ -33,25 +24,7 @@ function load() {
      inorder to iterate with them all running the reqiured functions on them
    */
 
-    // _getAjx('/list').then(function (data) {
-    //     var rdata = JSON.parse(data);
-    //     var context = { items: rdata };
-    //     var html = template(context);
-    //     //console.log(context);
-    //     //iterate through the elem and apply function to each element.
-    //     Array.from(compileto).map(function (elem) {
-    //     elem.innerHTML = html;
-    //         // //console.log(html);
-    //     });
-    //     getLinks();
-    //     // listings();
-
-    // }, function (error) {
-    //     var rdata = JSON.parse(error);
-    //     //console.log(error);
-    //     alert('Problem with the connection ' + rdata.error);
-    // });    
-    _get('/list',function (data) {
+    _getAjx('/list').then(function (data) {
         var rdata = JSON.parse(data);
         var context = { items: rdata };
         var html = template(context);
@@ -64,7 +37,11 @@ function load() {
         getLinks();
         // listings();
 
-    })
+    }, function (error) {
+        var rdata = JSON.parse(error);
+        //console.log(error);
+        alert('Problem with the connection ' + rdata.error);
+    });
     // var compileto = document.querySelector('.channels');
 
 }
@@ -117,7 +94,7 @@ function _get(pathname, callback) {
 
         }
     }
-    xhr.open('GET', pathname);
+    xhr.open('GET', `partial/${pathname}`);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
     xhr.send();
 
@@ -231,25 +208,8 @@ function _onChange() {
     var paths = window.location.hash.substring(1), pathname = paths.split('/');
     var slide = document.getElementById('slid');
     if (paths !== '') {
-        // _getAjx(`/partial/${paths}`).
-        //     then(function (response) {
-        //         slide.innerHTML = response;
-        //         if (pathname[1] === 'payments') {
-        //             var biller = pathname[0];
-        //             document.querySelector('.form-horizontal input[name="biller"]').value = biller;//the biller                 
-        //             document.querySelector('#biller').textContent = sessionStorage.getItem(biller);
-        //             document.querySelector('#purchase span').textContent = `Pay For `;
-        //             showform(); postform(document.forms['payform']);//postform is called on the payforms form 
-
-        //         }
-        //         if(document.body.scrollTop !== 0){
-        //             window.scroll(0,100);
-        //         }
-        //     }).catch(function (error) {
-        //         window.history.back();
-        //         //console.log(error)
-        //     })
-         _get(`/partial/${paths}`, function(response){
+        _getAjx(`/partial/${paths}`).
+            then(function (response) {
                 slide.innerHTML = response;
                 if (pathname[1] === 'payments') {
                     var biller = pathname[0];
@@ -262,7 +222,10 @@ function _onChange() {
                 if(document.body.scrollTop !== 0){
                     window.scroll(0,100);
                 }
-         })
+            }).catch(function (error) {
+                window.history.back();
+                //console.log(error)
+            })
     }
 
     //console.log('imeitwa');
@@ -545,6 +508,7 @@ function setValidity(text, formgroup)
 //atob(location.search.split('&')[1].split('=')[1])
 
 window.addEventListener('DOMContentLoaded', _onChange);//promiseHelpers
+window.addEventListener('DOMContentLoaded', promiseHelpers);
 window.addEventListener('DOMContentLoaded', load);//when initial DOM is loaded useful!!
 window.addEventListener('DOMContentLoaded', getLinks);//when initial DOM is loaded
 window.addEventListener('hashchange', _onChange);//when the hash changes
