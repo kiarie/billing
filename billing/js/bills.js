@@ -506,7 +506,8 @@ function setValidity(text, formgroup)
 }
 //atob(location.search.split('&')[1].split('=')[1])
 
-window.addEventListener('DOMContentLoaded', _onChange);
+window.addEventListener('DOMContentLoaded', _onChange);//promiseHelpers
+window.addEventListener('DOMContentLoaded', promiseHelpers);
 window.addEventListener('DOMContentLoaded', load);//when initial DOM is loaded useful!!
 window.addEventListener('DOMContentLoaded', getLinks);//when initial DOM is loaded
 window.addEventListener('hashchange', _onChange);//when the hash changes
