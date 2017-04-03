@@ -6,7 +6,7 @@ var addclasses = function(elem,classes){
     }
 function promiseHelpers()
 {
-    if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
+    if(typeof Promise === "undefined" && Promise.toString().indexOf("[native code]") == -1){
         var script = document.createElement('script')
         script.src = 'js/promise-poly.js';
         document.querySelector('head').appendChild(script)
