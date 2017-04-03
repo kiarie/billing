@@ -6,7 +6,6 @@
 
 	var isMobile = {
 		Android: function() {
-			alert('Please Use a Supported Browser Chrome/Firefox')
 			return navigator.userAgent.match(/Android/i);
 		},
 			BlackBerry: function() {
@@ -16,7 +15,6 @@
 			return navigator.userAgent.match(/iPhone|iPad|iPod/i);
 		},
 			Opera: function() {
-			alert('Please Use a Supported Browser Chrome/Firefox')
 			return navigator.userAgent.match(/Opera Mini/i);
 		},
 			Windows: function() {
@@ -29,10 +27,14 @@
 	var fullHeight = function() {
 
 		if ( !isMobile.any() ) {
-			$('.js-fullheight').css('height', $(window).height());
-			$(window).resize(function(){
-				$('.js-fullheight').css('height', $(window).height());
-			});
+			document.querySelector('.js-fullheight').style.height = window.style.height
+			window.onresize = function(evt){
+				document.querySelector('.js-fullheight').style.height = window.style.height;
+			};
+		}
+		if(isMobile.Android || isMobile.Opera)
+		{
+			alert('Please Use a Supported Browser Chrome/Firefox/Safari')
 		}
 
 	};
@@ -225,7 +227,7 @@
   
 
  	$(function(){
-		fullHeight();
+		// fullHeight();
 		sliderMain();
 		centerBlock();
 		responseHeight()
