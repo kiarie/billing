@@ -249,7 +249,7 @@ function _onChange() {
         //         window.history.back();
         //         //console.log(error)
         //     })
-         _get(paths, function(response){
+         _get(`/partial/${paths}`, function(response){
                 slide.innerHTML = response;
                 if (pathname[1] === 'payments') {
                     var biller = pathname[0];
