@@ -6,11 +6,21 @@ var addclasses = function(elem,classes){
     }
 function promiseHelpers()
 {
-    if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
+    if (Modernizr.promises) {
+  // supported
+  return true
+} else {
+    
         var script = document.createElement('script')
         script.src = 'js/promise-poly.js';
-        document.querySelector('head').appendChild(script)
+        document.body('head').appendChild(script)
+        alert('iko');
 }
+//     if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
+//         var script = document.createElement('script')
+//         script.src = 'js/promise-poly.js';
+//         document.querySelector('head').appendChild(script)
+// }
 }
 function load() {
 
