@@ -17,6 +17,12 @@
 			Opera: function() {
 			return navigator.userAgent.match(/Opera Mini/i);
 		},
+			supported_browsers:function(){
+			if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1){
+				return true;
+			}
+			return false;
+		},
 			Windows: function() {
 			return navigator.userAgent.match(/IEMobile/i);
 		},
@@ -32,14 +38,13 @@
 		// 		document.querySelector('.js-fullheight').style.height = ""+window.innerHeight+"px";
 		// 	};
 		// }
-			if ( !isMobile.any() ) {
+		if(!isMobile.any()) {
 			$('.js-fullheight').css('height', $(window).height());
 			$(window).resize(function(){
 				$('.js-fullheight').css('height', $(window).height());
 			});
 		}
-		if(isMobile.Android() || isMobile.Opera())
-		{
+		if(!isMobile.supported_browsers()) {
 			alert('Please Use a Supported Browser Chrome/Firefox/Safari')
 		}
 
