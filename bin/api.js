@@ -144,10 +144,9 @@ module.exports = function(express){
                       throw {error:{'name':paymentstatus,'text':"The transaction payment status is "+paymentstatus+" Therefore the account for "+getvars.p1+" has not been credited "}};                                                                         
                     }//end of the if                                                      
                 }).then(function (successful) {//returned promise from requeter.$http()
-                        console.log(successful+" ->billing API Response status")
-                    
+                    console.log(successful+" ->billing API Response status")
                     success =  successful.msg;
-                    var formupdate = { status_message : successful.msg};      
+                    var formupdate = { status_message : JSON.stringify(successful.msg)};      
                     return db.updatequery(con,formupdate,'billing_orders',ipnstring.id);
                 }).then(function(updated){
                     if(updated > 0){
