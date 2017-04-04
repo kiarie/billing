@@ -1,11 +1,10 @@
-var crypto = require('crypto');
 var requester = require('./requester.js');
 var hash = require('./hash.js');
 var querystring = require('querystring');
 const VENDOR_ID = 'ipaybilling';
 const HASH_KEY = '&*etrs#21)o!';//&*etrs#21)o!
 module.exports ={
-    vendor_id:VENDOR_ID,
+    vendor_id:VENDOR_ID,//exporting the vendor Id also
     paybill: function(data){
         
         var datastring = {};
@@ -17,11 +16,6 @@ module.exports ={
         var key = '&*etrs#21)o!';//&*etrs#21)o!      
         data.hash = hash.hash_hmac(querystring.stringify(datastring), 'sha256', key);
         return data;         
-    },
-    hash_hmac: function (data, algo) {
-       const hmac = crypto.createHmac(algo, 'SECKEY');
-       hmac.update(data);
-       return hmac.digest('hex');
     },
     webpay: function(data, id, host){
          var qrstring = {

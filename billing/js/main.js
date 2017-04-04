@@ -32,18 +32,22 @@
 	};
 	var fullHeight = function() {
 
-		// if ( !isMobile.any() ) {
-		// 	document.querySelector('.js-fullheight').style.height = ""+window.innerHeight+"px";
-		// 	window.onresize = function(evt){
-		// 		document.querySelector('.js-fullheight').style.height = ""+window.innerHeight+"px";
-		// 	};
-		// }
-		if(!isMobile.any()) {
-			$('.js-fullheight').css('height', $(window).height());
-			$(window).resize(function(){
-				$('.js-fullheight').css('height', $(window).height());
+		if ( !isMobile.any() ) {
+			Array.from(document.querySelectorAll('.js-fullheight')).map(function(elem){
+				elem.style.height = ""+window.innerHeight+"px";
 			});
-		}
+			window.onresize = function(evt){
+				Array.from(document.querySelectorAll('.js-fullheight')).map(function(elem){
+				elem.style.height = ""+window.innerHeight+"px";
+			});
+			};
+		} 
+		// if(!isMobile.any()) {
+		// 	$('.js-fullheight').css('height', $(window).height());
+		// 	$(window).resize(function(){
+		// 		$('.js-fullheight').css('height', $(window).height());
+		// 	});
+		// }
 		if(!isMobile.supported_browsers()) {
 			alert('Please Use a Supported Browser Chrome/Firefox/Safari')
 		}

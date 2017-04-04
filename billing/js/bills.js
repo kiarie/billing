@@ -5,9 +5,6 @@ var addclasses = function(elem,classes){
 		})
     }
 function load() {
-
-    //console.log("load event detected!");
-    // var source   = $("#entry-template").html();
     var source = document.getElementById("entry-template").innerHTML;
     var template = Handlebars.compile(source);
     var compileto = document.querySelectorAll('.channels');
@@ -193,7 +190,7 @@ function getLinks() {
 // 	}
 /**
  * @func _onChange
- * function to enact change of content
+ * function to enact change of content in the Page: essentially navigation
 */
 function _onChange() {
     var paths = window.location.hash.substring(1), pathname = paths.split('/');
@@ -210,9 +207,8 @@ function _onChange() {
                     showform(); postform(document.forms['payform']);//postform is called on the payforms form 
 
                 }
-                if(document.body.scrollTop !== 0){
-                    window.scroll(0,100);
-                }
+                window.scroll(0,100);
+                
             }).catch(function (error) {
                 window.history.back();
                 //console.log(error)
@@ -223,9 +219,10 @@ function _onChange() {
 
 
 }
-//this is the one that renders the request for payment form bind it so that it works
 /**
- * 
+ * @func loading
+ * The Loader showing function when the page is still loading and not completely DOMContentLoaded
+ * thus Rendered
  */
 function _loading(){
     if(document.readyState == 'interactive')
@@ -252,7 +249,6 @@ function _loading(){
 }
 function showform() {
     var payfor = document.querySelectorAll('.fh5co-property-innter a,.fh5co-property-specification a');
-    //console.log(payfor);
     Array.from(payfor).map(function (link) {
         link.addEventListener('click', togglepay)
     });
@@ -315,15 +311,10 @@ function postforms(evt) {
     });
 }
 /**
- * @func bill complete a billing transaction
+ * func formvalid
+ * @param {*} evt
+ * validates the form input only sends to iPay if everything is okay 
  */
-function bill() {
-    var postbill = document.forms['complete-bill'];
-    if (postbill !== undefined) {
-        postform(postbill);
-        postform.submit();
-    }
-}
 function formvalid(evt) {
     evt.preventDefault(); //pevent preventDefault submit
     var form = evt.target;//this is the submited form

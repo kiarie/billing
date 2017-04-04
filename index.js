@@ -17,6 +17,12 @@ handlebars.registerHelper('ifEq', function(a,b,opt){
   }
   return opt.inverse(this)
 })
+handlebars.registerHelper('Capitalize', function(opt){
+  var word = opt.fn(this).split("")
+  word[0] = word[0].toUpperCase();
+  if(opt.fn(this) === 'tv') return opt.fn(this).toUpperCase();
+  return word.join("")
+})
 // apply the routes to our application
 
 

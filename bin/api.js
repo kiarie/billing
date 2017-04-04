@@ -126,10 +126,10 @@ module.exports = function(express){
                     if(paymentstatus == true && updated > 0){ //if true trigger a call to the billing API
                     // if(updated > 0){ //if true trigger for test call to the billing API
                         var paystring ={};
-                        paystring.biller_name = getvars.p1;
-                        paystring.account =  getvars.p2;
-                        paystring.phone = getvars.msisdn_idnum;
-                        paystring.amount = getvars.mc ;
+                        paystring.biller_name = getvars.p1;//eg. safaricom, gotv etc...
+                        paystring.account =  getvars.p2; //account bieng cre4dited  
+                        paystring.phone = getvars.msisdn_idnum; //Phone number
+                        paystring.amount = getvars.mc ; //value of the credit amount 
                         paystring.vid = bill.vendor_id; //ipaybilling
                         var forpaystring  = bill.paybill(paystring);
                         // '/ipay-billing/create' original
