@@ -49,7 +49,7 @@
 		// 	});
 		// }
 		if(!isMobile.supported_browsers()) {
-			alert('Please Use a Supported Browser Chrome/Firefox/Safari')
+			alert('Please Use a Supported Browser')
 		}
 
 	};

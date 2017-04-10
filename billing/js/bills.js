@@ -4,7 +4,11 @@ var addclasses = function(elem,classes){
 			elem.classList.add(cl);
 		})
     }
+
 function load() {
+
+    //console.log("load event detected!");
+    // var source   = $("#entry-template").html();
     var source = document.getElementById("entry-template").innerHTML;
     var template = Handlebars.compile(source);
     var compileto = document.querySelectorAll('.channels');
@@ -12,7 +16,7 @@ function load() {
      inorder to iterate with them all running the reqiured functions on them
    */
 
-    _getAjx('/list').then(function (data) {
+    _get('/list' ,function (data) {
         var rdata = JSON.parse(data);
         var context = { items: rdata };
         var html = template(context);
@@ -49,17 +53,22 @@ function ajx(e) {
     //console.log(tar);
     var slide = document.getElementById('slid');
     var response;
-    _get(tar, function (res) {
+    _get(`partial/${tar}`, function (res) {
         response = res;
         slide.innerHTML = res;
         return response
     });
 }
-function _get(pathname, callback) {
+function _get(pathname, callback, errorcallback) {
     var xhr = new XMLHttpRequest();
     // var loaded;
     xhr.onload = function (evt) {
-        callback(this.response);
+         if (xhr.status === 200) {
+                callback(this.response);
+            } else {
+                errorcallback(this.response);
+            }
+        
         showform();//list the billing options available
     }
     xhr.onreadystatechange = function () {
@@ -82,50 +91,12 @@ function _get(pathname, callback) {
 
         }
     }
-    xhr.open('GET', `partial/${pathname}`);
+    xhr.open('GET', `${pathname}`);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
     xhr.send();
 
 }
-/**
- * @funct _getAjx
- * function to return a get request as a promise so we can
- * use it in other functions.
- */
-function _getAjx(pathname) {
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function (evt) {
-            if (xhr.status === 200) {
-                resolve(this.response)
-            } else {
-                reject(this.response);
-            }
-        }
-        xhr.onreadystatechange = function () {
-            var loader = document.createElement('img');
-            if (xhr.readyState == 1) {
 
-                loader.src = "images/loading.gif";
-                loader.id = "loader"
-                loader.style.position = "fixed";
-                loader.style.zIndex = "1000";
-                loader.style.top = "44%";
-                loader.style.left = "48%";
-
-                document.body.appendChild(loader);
-
-            }
-            if (xhr.readyState == 4) {
-                document.body.removeChild(document.getElementById('loader'))
-            }
-        }
-        xhr.onerror = reject;
-        xhr.open('GET', `${pathname}`);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-        xhr.send();
-    });
-}
 /**
  * @func _post
  * My own custom post ajax functions that returns a promise
@@ -190,14 +161,16 @@ function getLinks() {
 // 	}
 /**
  * @func _onChange
- * function to enact change of content in the Page: essentially navigation
+ * function to enact change of content
 */
 function _onChange() {
     var paths = window.location.hash.substring(1), pathname = paths.split('/');
     var slide = document.getElementById('slid');
+        console.log(`/partial/${paths}`)
+    
     if (paths !== '') {
-        _getAjx(`/partial/${paths}`).
-            then(function (response) {
+                _get(`/partial/${paths}`,function (response) {
+
                 slide.innerHTML = response;
                 if (pathname[1] === 'payments') {
                     var biller = pathname[0];
@@ -207,9 +180,10 @@ function _onChange() {
                     showform(); postform(document.forms['payform']);//postform is called on the payforms form 
 
                 }
-                window.scroll(0,100);
-                
-            }).catch(function (error) {
+                if(document.body.scrollTop !== 0){
+                    window.scroll(0,100);
+                }
+            },function (error) {
                 window.history.back();
                 //console.log(error)
             })
@@ -219,10 +193,9 @@ function _onChange() {
 
 
 }
+//this is the one that renders the request for payment form bind it so that it works
 /**
- * @func loading
- * The Loader showing function when the page is still loading and not completely DOMContentLoaded
- * thus Rendered
+ * 
  */
 function _loading(){
     if(document.readyState == 'interactive')
@@ -249,6 +222,7 @@ function _loading(){
 }
 function showform() {
     var payfor = document.querySelectorAll('.fh5co-property-innter a,.fh5co-property-specification a');
+    //console.log(payfor);
     Array.from(payfor).map(function (link) {
         link.addEventListener('click', togglepay)
     });
@@ -311,10 +285,15 @@ function postforms(evt) {
     });
 }
 /**
- * func formvalid
- * @param {*} evt
- * validates the form input only sends to iPay if everything is okay 
+ * @func bill complete a billing transaction
  */
+function bill() {
+    var postbill = document.forms['complete-bill'];
+    if (postbill !== undefined) {
+        postform(postbill);
+        postform.submit();
+    }
+}
 function formvalid(evt) {
     evt.preventDefault(); //pevent preventDefault submit
     var form = evt.target;//this is the submited form
@@ -489,7 +468,7 @@ function setValidity(text, formgroup)
 }
 //atob(location.search.split('&')[1].split('=')[1])
 
-window.addEventListener('DOMContentLoaded', _onChange);
+window.addEventListener('DOMContentLoaded', _onChange);//promiseHelpers
 window.addEventListener('DOMContentLoaded', load);//when initial DOM is loaded useful!!
 window.addEventListener('DOMContentLoaded', getLinks);//when initial DOM is loaded
 window.addEventListener('hashchange', _onChange);//when the hash changes
