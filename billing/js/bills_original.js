@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 var addclasses = function(elem,classes){
 		var cls = classes.trimRight(" ").split(" ");
 		cls.map(function(cl){
