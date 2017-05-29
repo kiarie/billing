@@ -239,7 +239,47 @@
 
 		} , { offset: '85%' } );
 	};
-  
+	var serviceworker = function(){
+		if ('serviceWorker' in navigator) {
+		window.addEventListener('load', function() {
+			navigator.serviceWorker.register('../serviceworker.js').then(function(registration) {
+			// Registration was successful
+			console.log(registration)
+			console.log('ServiceWorker registration successful with scope: ', registration.scope);
+			}, function(err) {
+			// registration failed :(
+			console.log('ServiceWorker registration failed: ', err);
+			});
+		});
+		navigator.serviceWorker.addEventListener('message', function(event){
+			var content = {};
+			if(event.data.type = 'fetch')
+			{
+				content.status = 'danger';
+				content.text = "You are Offline cannot fetch this Page, turn on data(we will cache it for next time though!)";
+				showAlert(content, 'Network error');
+			}
+		});
+	}
+}
+	var showAlert = function(content, header) {
+		var show = document.createElement('div'),
+			lutry = document.querySelector('.lutry');
+		show.classList.add('alert');
+		// show.classList.add('alert-'+content.status);
+		show.classList.add('fadeInUp');
+		show.classList.add('col-sm-3');
+		var contents = document.createTextNode(content.text);
+		show.appendChild(contents);
+		show.style.top = '70px';
+		show.style.position = 'absolute';
+		show.style.backgroundColor = '#fff';
+		show.style.zIndex = '20010';
+		lutry.appendChild(show);
+		setTimeout(function(){
+			lutry.removeChild(show);
+		},2500)
+	} 
 
  	$(function(){
 		fullHeight();
@@ -252,6 +292,7 @@
 		toggleBtnColor();
 		contentWayPoint();
 		getFullYear();
+		serviceworker();
 	});
 
 

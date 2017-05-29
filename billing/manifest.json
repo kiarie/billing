@@ -1,0 +1,29 @@
+{
+    "name": "iPay Billing:: Pay Your Bills conviniently",
+    "short_name": "iPay Billing",
+    "display":"standalone",
+    "start_url": "/",
+    "icons":[
+       { 
+        "src":"log-72x72.png",
+        "type": "image/png",
+        "sizes": "72x72",
+        "density": 1.5
+       },
+       {
+        "src": "log-36x36.png",
+        "sizes": "36x36",
+        "type": "image/png",
+        "density": 0.75
+       },
+       {
+        "src": "log-48x48.png",
+        "sizes": "48x48",
+        "type": "image/png",
+        "density": 1.0
+      }
+    ],
+    "background_color": "#4e5c69",
+    "theme_color": "#4e5c69",
+    "orientation": "landscape"
+}

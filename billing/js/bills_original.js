@@ -1,10 +1,10 @@
 import 'babel-polyfill'
-var addclasses = function(elem,classes){
-		var cls = classes.trimRight(" ").split(" ");
-		cls.map(function(cl){
-			elem.classList.add(cl);
-		})
-    }
+var addclasses = function (elem, classes) {
+    var cls = classes.trimRight(" ").split(" ");
+    cls.map(function (cl) {
+        elem.classList.add(cl);
+    })
+}
 function load() {
     var source = document.getElementById("entry-template").innerHTML;
     var template = Handlebars.compile(source);
@@ -20,7 +20,7 @@ function load() {
         //console.log(context);
         //iterate through the elem and apply function to each element.
         Array.from(compileto).map(function (elem) {
-        elem.innerHTML = html;
+            elem.innerHTML = html;
             // //console.log(html);
         });
         getLinks();
@@ -64,16 +64,15 @@ function _get(pathname, callback) {
         showform();//list the billing options available
     }
     xhr.onreadystatechange = function () {
-        var loader = document.createElement('img');
+        var loader = document.createElement('div');
         if (xhr.readyState == 1) {
-
-            loader.src = "images/loading.gif";
-            loader.id = "loader"
             loader.style.position = "fixed";
             loader.style.zIndex = "1000";
             loader.style.top = "44%";
             loader.style.left = "48%";
-
+            var loadWrap = document.createElement('div');
+            loadWrap.classList.add("spinner");
+            loader.appendChild(loadWrap);
             document.body.appendChild(loader);
 
         }
@@ -106,14 +105,13 @@ function _getAjx(pathname) {
         xhr.onreadystatechange = function () {
             var loader = document.createElement('img');
             if (xhr.readyState == 1) {
-
-                loader.src = "images/loading.gif";
-                loader.id = "loader"
                 loader.style.position = "fixed";
                 loader.style.zIndex = "1000";
                 loader.style.top = "44%";
                 loader.style.left = "48%";
-
+                var loadWrap = document.createElement('div');
+                loadWrap.classList.add("spinner");
+                loader.appendChild(loadWrap);
                 document.body.appendChild(loader);
 
             }
@@ -164,12 +162,12 @@ function getLinks() {
 // 		var category_list = document.querySelector('#best-deal .row');
 // 		Array.from(document.querySelectorAll('#fh5co-offcanvas ul li a')).map(function(li){
 // 			if(li.href.substr(-8)!== '#contact' && li.href.substr(0,3) !=='tel' ){
-                
+
 // 				var listing = document.createElement('div'),
 //                     img = document.createElement('img')
 //                 img.src = 'images/billing_images/'+li.href.split('#')[1]+'.png';
 //                 img.maxHeight = '240';
-            
+
 //                 addClass(img, 'img-responsive')
 // 				addclasses(listing, "col-md-4 item-block animated fadeInUp");
 // 				 var blockquote  = document.createElement('div');
@@ -208,8 +206,8 @@ function _onChange() {
                     showform(); postform(document.forms['payform']);//postform is called on the payforms form 
 
                 }
-                window.scroll(0,100);
-                
+                window.scroll(0, 100);
+
             }).catch(function (error) {
                 window.history.back();
                 //console.log(error)
@@ -225,28 +223,27 @@ function _onChange() {
  * The Loader showing function when the page is still loading and not completely DOMContentLoaded
  * thus Rendered
  */
-function _loading(){
-    if(document.readyState == 'interactive')
-    {
-        Array.from(document.querySelectorAll('.btn')).map(function(btn){
-	                btn.disabled = true;
-                    // console.log(btn)
-                });
+function _loading() {
+    if (document.readyState == 'interactive') {
+        Array.from(document.querySelectorAll('.btn')).map(function (btn) {
+            btn.disabled = true;
+            // console.log(btn)
+        });
         var loader = document.createElement('img');
-                loader.src = "images/loading.gif";
-                loader.id = "loader"
-                loader.style.position = "fixed";
-                loader.style.zIndex = "1000";
-                loader.style.top = "44%";
-                loader.style.left = "48%";
+        loader.src = "images/loading.gif";
+        loader.id = "loader"
+        loader.style.position = "fixed";
+        loader.style.zIndex = "1000";
+        loader.style.top = "44%";
+        loader.style.left = "48%";
 
-                document.body.appendChild(loader);
+        document.body.appendChild(loader);
 
-            }
+    }
     if (document.readyState == 'complete') {
         document.body.removeChild(document.getElementById('loader'))
     }
-    
+
 }
 function showform() {
     var payfor = document.querySelectorAll('.fh5co-property-innter a,.fh5co-property-specification a');
@@ -319,7 +316,7 @@ function postforms(evt) {
 function formvalid(evt) {
     evt.preventDefault(); //pevent preventDefault submit
     var form = evt.target;//this is the submited form
- 
+
     if (isNaN(form.tel.value) || form.tel.value.length < 12 || form.tel.value == "" || form.tel.value.substring(0, 3) !== "254") {
         //console.log(form.tel.parentElement.parentElement);
         form.tel.parentElement.parentElement.classList.add('has-error');
@@ -337,19 +334,19 @@ function formvalid(evt) {
         form.account.focus(); return false;
     } else {
         var btn = evt.target.querySelector('.btn-success');
-            btn.disabled = true;
-            btn.style.backgroundImage = "url('images/loading-btn.gif')";
-            btn.style.backgroundRepeat = "no-repeat";
-            btn.style.backgroundSize = "contain";
-          
-            evt.target.submit();
+        btn.disabled = true;
+        btn.style.backgroundImage = "url('images/loading-btn.gif')";
+        btn.style.backgroundRepeat = "no-repeat";
+        btn.style.backgroundSize = "contain";
+
+        evt.target.submit();
         //postforms(evt);//submit the from if everything else is okay   this was the Ajax way        
     }
 
 
 }
 function validation(evt) {
-    var e = evt.target, 
+    var e = evt.target,
         formgroup = e.parentElement.parentElement,
         mobileProviders = ['airtel', 'safaricom', 'orange'];
     switch (e.name) {
@@ -362,8 +359,8 @@ function validation(evt) {
             } else {
                 setValidity("", formgroup);
                 toggleRemove(formgroup, 'has-error')
-                if(mobileProviders.includes(location.hash.substring(1).split('/')[[0]])){
-                document.forms.payform['account'].value =  e.value;
+                if (mobileProviders.includes(location.hash.substring(1).split('/')[[0]])) {
+                    document.forms.payform['account'].value = e.value;
                 }
             }
             break;
@@ -417,23 +414,23 @@ function showAlert(content, header) {
         contents = content;
     if (content.status_message !== undefined) contents = content.status_message;
     if (content.text !== undefined) contents = content.text;
-    if (content.ipay_reference !== undefined){
-        reference = document.createTextNode('Reference: '+content.ipay_reference);
+    if (content.ipay_reference !== undefined) {
+        reference = document.createTextNode('Reference: ' + content.ipay_reference);
         var Ref = document.createElement('h4');
         Ref.appendChild(reference);
         elem.appendChild(Ref);
     }
     //----------- the Header -------------------------//
     var headers = document.createElement('h4');
-    addClass(headers, 'text-'+content.status)             
+    addClass(headers, 'text-' + content.status)
     var header_content = document.createTextNode(header);
     headers.appendChild(header_content);
     //----------- the Content--------------------------//
     var text = document.createTextNode(contents)
     var p = document.createElement('span');
-    addClass(p, 'text-'+content.status)
+    addClass(p, 'text-' + content.status)
     p.appendChild(text);
-    addClass(closebtn, 'btn-'+content.status)
+    addClass(closebtn, 'btn-' + content.status)
     //------------Bring It All together----------------//
     elem.appendChild(headers);
     elem.appendChild(p);
@@ -447,11 +444,11 @@ function _onalert() {
         var querstring = location.search.split('&'),
             content,
             header = querstring[0].replace('?', '').split('=')[1];
-            //console.log(querstring[1].split('=')[0]);
+        //console.log(querstring[1].split('=')[0]);
         if (querstring[1].split('=')[0] === 'e') { //the querstring second element get its key i.e. su->success or e ->error
             content = JSON.parse(atob(querstring[1].split('=')[1]));
             content.status = "danger";
-        }else if(querstring[1].split('=')[0] === 'su'){
+        } else if (querstring[1].split('=')[0] === 'su') {
             content = JSON.parse(atob(querstring[1].split('=')[1]));
         }
         //console.log(content);
@@ -474,22 +471,19 @@ function dismissAlert(elem) {
  * @param {* the text to be displayed by the error message helper} text 
  * @param {* the from-group parent parentElement} formgroup 
  */
-function setValidity(text, formgroup)
-{
-    if(text !== "" && formgroup.querySelector('.help-block') === null)
-    {
-    var helptext = document.createElement('span');
-    addClass(helptext, 'help-block');
-    addClass(helptext, 'col-md-offset-4');
-    var innetext = document.createTextNode(text);
-    helptext.appendChild(innetext);
-    formgroup.appendChild(helptext);
-    }else if(text === "" && formgroup.querySelector('.help-block') !== null){
+function setValidity(text, formgroup) {
+    if (text !== "" && formgroup.querySelector('.help-block') === null) {
+        var helptext = document.createElement('span');
+        addClass(helptext, 'help-block');
+        addClass(helptext, 'col-md-offset-4');
+        var innetext = document.createTextNode(text);
+        helptext.appendChild(innetext);
+        formgroup.appendChild(helptext);
+    } else if (text === "" && formgroup.querySelector('.help-block') !== null) {
         formgroup.removeChild(formgroup.querySelector('.help-block'));
     }
 }
 //atob(location.search.split('&')[1].split('=')[1])
-
 window.addEventListener('DOMContentLoaded', _onChange);
 window.addEventListener('DOMContentLoaded', load);//when initial DOM is loaded useful!!
 window.addEventListener('DOMContentLoaded', getLinks);//when initial DOM is loaded
