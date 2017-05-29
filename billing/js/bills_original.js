@@ -66,6 +66,7 @@ function _get(pathname, callback) {
     xhr.onreadystatechange = function () {
         var loader = document.createElement('div');
         if (xhr.readyState == 1) {
+            loader.id = "loader";
             loader.style.position = "fixed";
             loader.style.zIndex = "1000";
             loader.style.top = "44%";
@@ -103,8 +104,9 @@ function _getAjx(pathname) {
             }
         }
         xhr.onreadystatechange = function () {
-            var loader = document.createElement('img');
+            var loader = document.createElement('div');
             if (xhr.readyState == 1) {
+                loader.id = "loader";
                 loader.style.position = "fixed";
                 loader.style.zIndex = "1000";
                 loader.style.top = "44%";
@@ -229,15 +231,17 @@ function _loading() {
             btn.disabled = true;
             // console.log(btn)
         });
-        var loader = document.createElement('img');
-        loader.src = "images/loading.gif";
-        loader.id = "loader"
+        var loader = document.createElement('div');
+        loader.id = "loader";
         loader.style.position = "fixed";
         loader.style.zIndex = "1000";
         loader.style.top = "44%";
         loader.style.left = "48%";
-
+        var loadWrap = document.createElement('div');
+        loadWrap.classList.add("spinner");
+        loader.appendChild(loadWrap);
         document.body.appendChild(loader);
+
 
     }
     if (document.readyState == 'complete') {

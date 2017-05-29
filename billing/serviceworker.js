@@ -11,7 +11,7 @@ var urls = [
     '/css/style.css',
     '/css/fonts/',
     '/js/jquery.min.js',
-    '/js/handlebars.js',
+    '/js/handlebars.min.js',
     '/js/jquery.flexslider-min.js',
     '/js/jquery.waypoints.min.js',
     '/images/',
