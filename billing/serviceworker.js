@@ -88,7 +88,7 @@ self.addEventListener('activate', function(event){
 
 });
 function sendMessage(messageType){
-    /** Get all clients attached to this service worker and iterate through them if they are many posting a message eevent to them with the specified messagetype object like: {type:....} */
+    /** Get all clients attached to this service worker and iterate through them if they are many posting a message event to them with the specified messagetype object like: {type:....} */
     self.clients.matchAll().then(function(allClients){
                     allClients.map(function(client){
                         client.postMessage(messageType)                       
