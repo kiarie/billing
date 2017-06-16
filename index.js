@@ -25,7 +25,7 @@ handlebars.registerHelper('Capitalize', function(opt){
 })
 // apply the routes to our application
 
-
+const state = {};
 
 const templateUrl = /([^/]*)(\/|\/index.html)$/;
 app.get('/partial/:name/:specname?', function(req, res) {
@@ -48,7 +48,12 @@ app.get('/partial/:name/:specname?', function(req, res) {
     files.
     then(file => f = file.toString('utf-8')).    
     then(file => {
-       return requester.$get('/billing/v2/list/'+partial)
+      if(state[partial] === undefined){
+       state[partial] = requester.$get('/billing/v2/list/'+partial);  
+       console.log('imefetch');    
+      }
+      console.log(state);
+      return state[partial];
     }).
     then(data => {
     return handlebars.compile(f)({categories : data.data, name : partial, image_url:subcategory})

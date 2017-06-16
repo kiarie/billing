@@ -255,6 +255,7 @@ function showform() {
         link.addEventListener('click', togglepay)
     });
 }
+var state ={};//Global state
 /**
  * @func togglepay
  * @param {*} evt 
@@ -272,7 +273,14 @@ function togglepay(evt) {
     var path = pathname[1], biller = pathname[0];
     //console.log(pathname)
     //store a session for use
+    stateHandle(state, {billername: minimum_balance})
     sessionStorage.setItem(biller, billername);
+    console.log(state);
+    
+}
+function stateHandle(prevState, newState)
+{
+    return Object.assign(prevState, newState);
 }
 /**
  * @postform binds an element to the submit eventlistener element is a form
