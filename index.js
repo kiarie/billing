@@ -62,6 +62,7 @@ app.get('/partial/:name/:specname?', function(req, res) {
         // const content = files.join('');
         res.set({
     //   'ETag': hash,
+        'Link': '</xxx.css>;rel=preload, </xxx.js>; rel=preload',
         'Cache-Control': 'public, no-cache'
         });
         res.send(tpl);
