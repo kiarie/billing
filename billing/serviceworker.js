@@ -55,7 +55,7 @@ self.addEventListener('fetch', function(event){
             console.log('bypassed cache');
             var fetchrequest = event.request.clone();
 
-            return fetch(fetchrequest).then(function(response){
+            return fetch(fetchrequest, {credentials: 'include'}).then(function(response){
                 if(!response || response.status !== 200 || response.type !== 'basic') {
                     return response;
                 }
@@ -85,6 +85,9 @@ self.addEventListener('activate', function(event){
             );
         })
     );
+
+});
+self.addEventListener('push', function(event){
 
 });
 function sendMessage(messageType){
