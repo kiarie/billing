@@ -46,7 +46,9 @@ self.addEventListener('install', function (event) {
 });
 self.addEventListener('fetch', function (event) {
     if (event.request.method == 'POST') {
-        event.respondWith(fetch(event.request));
+        event.respondWith(fetch(event.request).then(function (response) {
+            return response;
+        }));
     }
     event.respondWith(
         caches.match(event.request)
