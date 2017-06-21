@@ -49,32 +49,34 @@ self.addEventListener('fetch', function (event) {
         event.respondWith(fetch(event.request).then(function (response) {
             return response;
         }));
-    }
-    event.respondWith(
-        caches.match(event.request)
-            .then(function (response) {
-                console.log('opened cache');
-                if (response) {
-                    return response;
-                }
-                console.log('bypassed cache');
-                var fetchrequest = event.request.clone();
-
-                return fetch(fetchrequest, { credentials: 'include' }).then(function (response) {
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
+    } else {
+        event.respondWith(
+            caches.match(event.request)
+                .then(function (response) {
+                    console.log('opened cache');
+                    if (response) {
                         return response;
                     }
-                    var responseToCache = response.clone();
-                    caches.open(CACHE_NAME).
-                        then(function (cache) {
-                            cache.put(event.request, responseToCache);
-                        });
-                    return response;
-                }).catch(function (error) {
-                    sendMessage({ type: 'fetch' });
-                });
-            })
-    );
+                    console.log('bypassed cache');
+                    var fetchrequest = event.request.clone();
+
+                    return fetch(fetchrequest, { credentials: 'include' }).then(function (response) {
+                        if (!response || response.status !== 200 || response.type !== 'basic') {
+                            return response;
+                        }
+                        var responseToCache = response.clone();
+                        caches.open(CACHE_NAME).
+                            then(function (cache) {
+                                cache.put(event.request, responseToCache);
+                            });
+                        return response;
+                    }).catch(function (error) {
+                        sendMessage({ type: 'fetch' });
+                    });
+                })
+        );
+    }
+
 });
 
 self.addEventListener('activate', function (event) {

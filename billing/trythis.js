@@ -2,22 +2,22 @@
 
 const ajaxRequest = new (function () {
 
-    function closeReq () {
+    function closeReq() {
         oLoadingBox.parentNode && document.body.removeChild(oLoadingBox);
         bIsLoading = false;
     }
 
-    function abortReq () {
+    function abortReq() {
         if (!bIsLoading) { return; }
         oReq.abort();
         closeReq();
     }
 
-    function ajaxError () {
+    function ajaxError() {
         alert("Unknown error.");
     }
 
-    function ajaxLoad () {
+    function ajaxLoad() {
         var vMsg, nStatus = this.status;
         switch (nStatus) {
             case 200:
@@ -62,11 +62,11 @@ const ajaxRequest = new (function () {
         closeReq();
     }
 
-    function filterURL (sURL, sViewMode) {
+    function filterURL(sURL, sViewMode) {
         return sURL.replace(rSearch, "") + ("?" + sURL.replace(rHost, "&").replace(rView, sViewMode ? "&" + sViewKey + "=" + sViewMode : "").slice(1)).replace(rEndQstMark, "");
     }
 
-    function getPage (sPage) {
+    function getPage(sPage) {
         if (bIsLoading) { return; }
         oReq = new XMLHttpRequest();
         bIsLoading = true;
@@ -78,7 +78,7 @@ const ajaxRequest = new (function () {
         oLoadingBox.parentNode || document.body.appendChild(oLoadingBox);
     }
 
-    function requestPage (sURL) {
+    function requestPage(sURL) {
         if (history.pushState) {
             bUpdateURL = true;
             getPage(sURL);
@@ -88,7 +88,7 @@ const ajaxRequest = new (function () {
         }
     }
 
-    function processLink () {
+    function processLink() {
         if (this.className === sAjaxClass) {
             requestPage(this.href);
             return false;
@@ -96,7 +96,7 @@ const ajaxRequest = new (function () {
         return true;
     }
 
-    function init () {
+    function init() {
         oPageInfo.title = document.title;
         for (var oLink, nIdx = 0, nLen = document.links.length; nIdx < nLen; document.links[nIdx++].onclick = processLink);
     }
@@ -201,5 +201,5 @@ const ajaxRequest = new (function () {
     this.open = requestPage;
     this.stop = abortReq;
     this.rebuildLinks = init;
-    
+
 })();

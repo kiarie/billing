@@ -4,23 +4,23 @@ var router = require('./bin/api');
 const fs = require('mz/fs');
 const handlebars = require('handlebars');
 var requester = require('./bin/requester'),
-    db = require('./bin/logic'),
+  db = require('./bin/logic'),
   port = process.env.PORT || 3000;
 
 /**
  * Registering a Handlebars Custom Helper
  * our own helper to check for equality (or inequality).
  */
-handlebars.registerHelper('ifEq', function(a,b,opt){
-  if(a === b){
+handlebars.registerHelper('ifEq', function (a, b, opt) {
+  if (a === b) {
     return opt.fn(this)
   }
   return opt.inverse(this)
 })
-handlebars.registerHelper('Capitalize', function(opt){
+handlebars.registerHelper('Capitalize', function (opt) {
   var word = opt.fn(this).split("")
   word[0] = word[0].toUpperCase();
-  if(opt.fn(this) === 'tv') return opt.fn(this).toUpperCase();
+  if (opt.fn(this) === 'tv') return opt.fn(this).toUpperCase();
   return word.join("")
 })
 // apply the routes to our application
@@ -28,51 +28,51 @@ handlebars.registerHelper('Capitalize', function(opt){
 const state = {};
 
 const templateUrl = /([^/]*)(\/|\/index.html)$/;
-app.get('/partial/:name/:specname?', function(req, res) {
-  var partial, subcategory = "none",files,f; //initialise three variables at once awesome!! js killed it
+app.get('/partial/:name/:specname?', function (req, res) {
+  var partial, subcategory = "none", files, f; //initialise three variables at once awesome!! js killed it
   //f->this will be the file, partial->will be the file name, files->is the contents of the file read
-  if(!req.params.specname){
+  if (!req.params.specname) {
     partial = req.params.name;
-  }else{
-    partial = req.params.specname;    
+  } else {
+    partial = req.params.specname;
     subcategory = req.params.name; //e.g. Airtel, safaricom, zuku
   }
   console.log(req.xhr);
-  var compare = partial === 'contact' || partial ==='buy' || partial ==='home' || partial === 'payments';
-        
-    if(compare) {
+  var compare = partial === 'contact' || partial === 'buy' || partial === 'home' || partial === 'payments';
+
+  if (compare) {
     files = fs.readFile(`billing/${partial}.html`);
-    }else{
-        files = fs.readFile(`billing/utils.html`);//the page which lists the billing options for a category
-    }
-    files.
-    then(file => f = file.toString('utf-8')).    
+  } else {
+    files = fs.readFile(`billing/utils.html`);//the page which lists the billing options for a category
+  }
+  files.
+    then(file => f = file.toString('utf-8')).
     then(file => {
-      if(state[partial] === undefined){
-       state[partial] = requester.$get('/billing/v2/list/'+partial);  
-       console.log('imefetch');    
+      if (state[partial] === undefined) {
+        state[partial] = requester.$get('/billing/v2/list/' + partial);
+        console.log('imefetch');
       }
       console.log(state);
       return state[partial];
     }).
     then(data => {
-    return handlebars.compile(f)({categories : data.data, name : partial, image_url:subcategory})
+      return handlebars.compile(f)({ categories: data.data, name: partial, image_url: subcategory })
     }).
     then(tpl => {
-        // const content = files.join('');
-        res.set({
-    //   'ETag': hash,
+      // const content = files.join('');
+      res.set({
+        //   'ETag': hash,
         'Link': '</css/xxx.css>;rel=preload, </js/xxx.js>; rel=preload',
         'Cache-Control': 'public, no-cache'
-        });
-        res.send(tpl);
+      });
+      res.send(tpl);
     })
     .catch(error => res.status(500).send(error.toString()));
-  }); 
-  /**
-   * use this eventually to serve? 
-   */
-  //app.get('/:name?/:specname?', function(req, res) {}); 
+});
+/**
+ * use this eventually to serve? 
+ */
+//app.get('/:name?/:specname?', function(req, res) {}); 
 //   Promise.all(files).
 //   then(files => files.map(f => f.toString('utf-8'))).
 //   then(files => {
@@ -84,7 +84,7 @@ app.get('/partial/:name/:specname?', function(req, res) {
 //     res.send(content);
 //   })
 //   .catch(error => res.status(500).send(error.toString()));
-    
+
 // });
 /*
 
@@ -145,24 +145,24 @@ function homerouter( req, res, next)
 app.use('/', require('./bin/api')(express));
 // app.use(ipncallbackHandler, homerouter);
 app.use(express.static('billing'));
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Page Not Found');
   err.status = 404;
   var files = [fs.readFile(`billing/error.html`)];
- 
-    
+
+
   Promise.all(files).
-  then(files => files.map(f => f.toString('utf-8'))).
-  then(files => {
+    then(files => files.map(f => f.toString('utf-8'))).
+    then(files => {
       const content = files.join('');
-       res.set({
-  //   'ETag': hash,
-      'Cache-Control': 'public, no-cache'
-    });
-    res.send(content);
-    next();
-  })
-  
+      res.set({
+        //   'ETag': hash,
+        'Cache-Control': 'public, no-cache'
+      });
+      res.send(content);
+      next();
+    })
+
 });
 
 app.listen(port);
