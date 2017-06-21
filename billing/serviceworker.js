@@ -1,6 +1,6 @@
 var VERSION = '1.0';/** bump up this to refresh cache */
 var CACHE_NAME = 'billing-static-cache';
-var CACHE_DYNAMIC = "billing-dynamic-cache-"+VERSION;
+var CACHE_DYNAMIC = "billing-dynamic-cache-" + VERSION;
 var urls = [
     '/',
     'manifest.json',
@@ -28,57 +28,60 @@ var urls = [
 var DynamicUrls = [
     '/js/bundle.js',
     '/js/main.js',
-    '/list'    
+    '/list'
 ];
 
-self.addEventListener('install', function(event){
+self.addEventListener('install', function (event) {
     event.waitUntil(
-        caches.open(CACHE_DYNAMIC).then(function(cache){
+        caches.open(CACHE_DYNAMIC).then(function (cache) {
             return cache.addAll(DynamicUrls);
         })
     );
     event.waitUntil(
-        caches.open(CACHE_NAME).then(function(cache){
+        caches.open(CACHE_NAME).then(function (cache) {
             console.log('opened cache');
             return cache.addAll(urls);
         })
     );
 });
-self.addEventListener('fetch', function(event){
+self.addEventListener('fetch', function (event) {
+    if (event.request.method == 'POST') {
+        event.respondWith(fetch(event.request));
+    }
     event.respondWith(
         caches.match(event.request)
-        .then(function(response){
-            console.log('opened cache');
-            if(response) {
-                return response;
-            }
-            console.log('bypassed cache');
-            var fetchrequest = event.request.clone();
-
-            return fetch(fetchrequest, {credentials: 'include'}).then(function(response){
-                if(!response || response.status !== 200 || response.type !== 'basic') {
+            .then(function (response) {
+                console.log('opened cache');
+                if (response) {
                     return response;
                 }
-                var responseToCache = response.clone();
-                caches.open(CACHE_NAME).
-                then(function(cache){
-                    cache.put(event.request, responseToCache);
+                console.log('bypassed cache');
+                var fetchrequest = event.request.clone();
+
+                return fetch(fetchrequest, { credentials: 'include' }).then(function (response) {
+                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                        return response;
+                    }
+                    var responseToCache = response.clone();
+                    caches.open(CACHE_NAME).
+                        then(function (cache) {
+                            cache.put(event.request, responseToCache);
+                        });
+                    return response;
+                }).catch(function (error) {
+                    sendMessage({ type: 'fetch' });
                 });
-                return response;
-            }).catch(function(error){
-                sendMessage({type: 'fetch'});
-            });
-        })
+            })
     );
 });
 
-self.addEventListener('activate', function(event){
+self.addEventListener('activate', function (event) {
     var cacheWhitList = [CACHE_NAME, CACHE_DYNAMIC];
     clients.claim();
     event.waitUntil(
-        caches.keys().then(function(cacheNames){
-            return Promise.all(cacheNames.map(function(cacheName){
-                if(cacheWhitList.indexOf(cacheName) === -1){
+        caches.keys().then(function (cacheNames) {
+            return Promise.all(cacheNames.map(function (cacheName) {
+                if (cacheWhitList.indexOf(cacheName) === -1) {
                     return caches.delete(cacheName)
                 }
             })
@@ -87,14 +90,14 @@ self.addEventListener('activate', function(event){
     );
 
 });
-self.addEventListener('push', function(event){
+self.addEventListener('push', function (event) {
 
 });
-function sendMessage(messageType){
+function sendMessage(messageType) {
     /** Get all clients attached to this service worker and iterate through them if they are many posting a message event to them with the specified messagetype object like: {type:....} */
-    self.clients.matchAll().then(function(allClients){
-                    allClients.map(function(client){
-                        client.postMessage(messageType)                       
-                    });
-                });
+    self.clients.matchAll().then(function (allClients) {
+        allClients.map(function (client) {
+            client.postMessage(messageType)
+        });
+    });
 }
