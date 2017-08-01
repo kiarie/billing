@@ -32,7 +32,8 @@ module.exports = {
           connection.query('INSERT IGNORE INTO billing_orders SET ?', filtered, function(err, result) {
             if (err) reject(err);
 
-            console.log(result.insertId);
+            // console.log(result.insertId);git diff
+            
             
             resolve(result.insertId);
             connection.end()
