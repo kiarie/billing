@@ -4,10 +4,11 @@ const mysql = require('mysql');
 module.exports = {
     configs:{
         online:{
-            host:"46.101.121.39",
-            user:"ipay",
-            password: "aun64UY2wJCySTn5",
-            database : 'online_billing'
+            host:"46.101.144.56",
+            port: 5056,
+            user:"micstation",
+            password: "52783970",
+            database : 'micstation_billing'
               },
         local:{
              host:"localhost",
@@ -33,7 +34,7 @@ module.exports = {
             if (err) reject(err);
 
             // console.log(result.insertId);git diff
-            
+
             
             resolve(result.insertId);
             connection.end()

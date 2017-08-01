@@ -61,8 +61,7 @@ module.exports = function (express) {
             file = exists.toString('utf-8');
             return file;
         }).then(function (file) { //insert into db first
-            var config = db.configs.online;
-            if (req.hostname == 'localhost') config = db.configs.local;
+            var config = (req.hostname == 'localhost')? db.configs.local : db.configs.online;
             var con = db.connection(config);
             return db.insertquery(con, JSON.parse(formdata));
         }, function (err) {
@@ -115,7 +114,7 @@ module.exports = function (express) {
 
                     var formdata = { paid_status: paymentstatus };
 
-                    return db.updatequery(con, formdata, 'billing_orders', ipnstring.id);
+                    return db.updatequery(con, formdata, 'billing_online', ipnstring.id);
                 } else {
                     throw { error: { 'name': '404', 'text': "Ipay did not return a response, try again" } }; console.log('failed after the check')
                 }//end of the  if
@@ -146,7 +145,7 @@ module.exports = function (express) {
                 console.log(successful + " ->billing API Response status")
                 success = successful.msg;
                 var formupdate = { status_message: JSON.stringify(successful.msg) };
-                return db.updatequery(con, formupdate, 'billing_orders', ipnstring.id);
+                return db.updatequery(con, formupdate, 'billing_online', ipnstring.id);
             }).then(function (updated) {
                 if (updated > 0) {
                     var base64 = new Buffer(JSON.stringify(success)).toString('base64');
@@ -157,7 +156,7 @@ module.exports = function (express) {
             }).catch(function (error) {//catch all any possible errors
                 var formupdate = { status_message: error.error.text };
                 console.log(formupdate)
-                db.updatequery(con, formupdate, 'billing_orders', ipnstring.id);
+                db.updatequery(con, formupdate, 'billing_online', ipnstring.id);
                 db.connectionend(con);
                 var base64 = new Buffer(JSON.stringify(formupdate)).toString('base64');
                 res.redirect('/?fl=' + ipnstring.id + '&e=' + base64)
