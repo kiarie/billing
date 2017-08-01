@@ -31,7 +31,7 @@ module.exports = {
         delete filtered.live;
        return new Promise(function(resolve, reject){
           connection.query('INSERT IGNORE INTO billing_online SET ?', filtered, function(err, result) {
-            if (err) reject(err);
+            if (err) return err;
 
             // console.log(result.insertId);git diff
 

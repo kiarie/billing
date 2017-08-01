@@ -65,6 +65,7 @@ module.exports = function (express) {
             var con = db.connection(config);
             return db.insertquery(con, JSON.parse(formdata));
         }, function (err) {
+            console.log(err);
             throw { 'error': { name: 'A Database Error', text: err.message } };
         }).then(function (id) {  //take note from here we will reuse for reload of page on fail
             var host = req.headers.referer,
