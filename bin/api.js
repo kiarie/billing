@@ -91,7 +91,7 @@ module.exports = function (express) {
             success,
             headers = {},
             paymentstatus,
-            configs = db.configs.online,
+            configs = (req.hostname == 'localhost')? db.configs.local : db.configs.online,
             ipnstring = {
                 vendor: bill.vendor_id,
                 id: getvars.id,
@@ -103,7 +103,6 @@ module.exports = function (express) {
                 ifd: getvars.ifd
             }
         console.log(querystring.stringify(ipnstring));
-        if (req.hostname == 'localhost') configs = db.configs.local
         // configs.debug = true;
         var con = db.connection(configs)
         requester._get('https://www.ipayafrica.com/ipn/?' + querystring.stringify(ipnstring)).
