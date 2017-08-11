@@ -31,7 +31,7 @@
     ],
     "background_color": "#4e5c69",
     "theme_color": "#4e5c69",
-    "orientation": "landscape",
+    "orientation": "potrait",
     "related_applications": [
       {
       "platform": "play",
