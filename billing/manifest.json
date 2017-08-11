@@ -4,6 +4,12 @@
     "display":"standalone",
     "start_url": "/",
     "icons":[
+      { 
+        "src":"log-144x144.png",
+        "type": "image/png",
+        "sizes": "144x144",
+        "density": 1.5
+       },
        { 
         "src":"log-72x72.png",
         "type": "image/png",
@@ -25,5 +31,11 @@
     ],
     "background_color": "#4e5c69",
     "theme_color": "#4e5c69",
-    "orientation": "landscape"
+    "orientation": "landscape",
+    "related_applications": [
+      {
+      "platform": "play",
+      "id": "com.ipayafrica.ipay"
+      }
+    ]
 }
