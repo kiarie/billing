@@ -45,7 +45,8 @@ self.addEventListener('install', function (event) {
     );
 });
 self.addEventListener('fetch', function (event) {
-    if (event.request.method == 'POST') {
+    console.log(event.request.url)
+    if (event.request.method == 'POST' || event.request.url.split('?')[0] == location.origin+'/ipn' || event.request.url.split('?')[1] !== undefined){
         event.respondWith(fetch(event.request).then(function (response) {
             return response;
         }));

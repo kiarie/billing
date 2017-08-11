@@ -1,8 +1,13 @@
 var bodyparser = require('body-parser');
 var querystring = require('querystring');
-const fs = require('mz/fs');
+const fs = require('fs');
 var db = require('./logic');
 const handlebars = require('handlebars');
+var showtpl = function (file, data, status){
+    var exists = fs.readFileSync(`billing/`+file+`.html`),
+        f = exists.toString('utf-8');
+    return handlebars.compile(f)({status:status, message: data})    
+}
 module.exports = function (express) {
     // home page route (http://localhost:3000)
     //get list of billing categories
@@ -75,7 +80,7 @@ module.exports = function (express) {
             return res.redirect(url + querystr);
         }).catch(function (error) {
             console.log(error)
-            var exists = fs.readFile(`billing/error.html`)
+            var exists = fs.readFileSync(`billing/error.html`)
             var file = exists.toString('utf-8');
             var tpl = handlebars.compile(file)(error);
             res.set({
@@ -102,6 +107,7 @@ module.exports = function (express) {
                 uyt: getvars.uyt,
                 ifd: getvars.ifd
             }
+    
         console.log(querystring.stringify(ipnstring));
         // configs.debug = true;
         var con = db.connection(configs)
@@ -149,6 +155,7 @@ module.exports = function (express) {
             }).then(function (updated) {
                 if (updated > 0) {
                     var base64 = new Buffer(JSON.stringify(success)).toString('base64');
+                    
                     res.redirect('/?fl=' + ipnstring.id + "&su=" + base64);
                 } else {
                     throw { error: { 'name': '404', 'text': "Could Not Update the Transaction status" } };
@@ -160,165 +167,14 @@ module.exports = function (express) {
                 db.connectionend(con);
                 var base64 = new Buffer(JSON.stringify(formupdate)).toString('base64');
                 res.redirect('/?fl=' + ipnstring.id + '&e=' + base64)
-
+                    // res.send(showtpl('callback', success, 200));
+                
             });
     });
     //redirects to home/
     //shows the error
     //allows for navigation
-    // api.post('/ipay', function(req, res){//this rout returns the payment interface of ipay...
-    //         var formdata = JSON.stringify(req.body);
-    //         var url = '/payments/v2/transact';
-    //         var file;
-    //         fs.readFile(`billing/pay.html`).then(function(exists)
-    //         {
-    //             file = exists.toString('utf-8');
-    //             return file;
-    //         }).then(function(file) { //insert into db first
-    //             var con = db.connection(db.configs); 
-    //             return db.insertquery(con,JSON.parse(formdata));
-    //         },function (err) {
-    //             throw {'error':{name:'A Database Error',text:err.message}};
-    //         }).then(function(id){  //take note from here we will reuse for reload of page on fail
-    //             var ipaystring = bill.restpay(JSON.parse(formdata),id);                     
-    //             console.log(ipaystring)                                           
-    //             return requester.ipayresttest(ipaystring,url)
-    //         }).then(function (data) {
-    //             if(data.data !== undefined){
-    //                 data.data.biller = formdata.p1;
-    //                 console.log(data)
-    //                 return handlebars.compile(file)(data.data);                        
-    //                 }                                  
-    //               throw {error:{name:'404', text:"Not Found any data"}};                        
-    //         }).then(function(tpl) {
-    //             res.set({
-    //           //'ETag': hash,
-    //             'Cache-Control': 'public, no-cache'
-    //                 });
-    //             res.send(tpl);
-
-    //         }).catch(function(error) {
-    //             console.log(error)
-    //             var exists = fs.readFile(`billing/error.html`)
-    //             var file = exists.toString('utf-8');
-    //             var tpl  = handlebars.compile(file)(error);
-    //             res.set({
-    //             //'ETag': hash,
-    //             'Cache-Control': 'public, no-cache'
-    //                 });
-    //             res.send(tpl);
-    //         });
-    //  });
-    api.post('/ipay/mobile', function (req, res) {//transact call for mobile rest integration
-        var formdata = req.body;
-        var url = '/payments/v2/transact/mobilemoney', success;
-        var ipaystring = bill.ipaymobile(formdata), headers = {}, paymentstatus;
-        requester.ipayresttest(ipaystring, url).then(function (data) {
-            if (data.status !== undefined) {
-                paymentstatus = bill.ipn(data.status) //returns true or 'status like less, failed, used if not successful'
-                console.log(paymentstatus + "payment status")
-                if (paymentstatus == true) { //if true trigger a call to the billing API
-                    console.log(paymentstatus + "payment status")
-                    var paystring = {};
-                    paystring.biller_name = data.p1;
-                    paystring.account = data.p2;
-                    paystring.phone = data.msisdn_id;
-                    paystring.amount = data.p4;
-                    paystring.vid = 'demo'
-                    var forpaystring = bill.paybill(paystring);
-                    return requester.$http(forpaystring, '/ipay-billing/create', 'apis.ipayafrica.com', headers)
-
-                } else if (paymentstatus !== true) { //Else lenga story and display the transaction failed
-                    console.log(paymentstatus + "payment status")
-
-                    throw { error: { 'name': paymentstatus, 'text': "The transaction is " + paymentstatus + " Therefore the account has not been credited" } };
-                }//end of the nested if
-            } else {
-                throw { error: { 'name': '404', 'text': "Ipay did not return a response, try again" } };
-            }//end of the outer if
-
-        }).then(function (success) {//returned promise from requeter.$http()
-            success = success.msg;
-            return fs.readFile(`billing/complete.html`)
-        }).then(function (exists) {
-            var file = exists.toString('utf-8');
-            var tpl = handlebars.compile(file)(success);
-            res.set({
-                //'ETag': hash,
-                'Cache-Control': 'public, no-cache'
-            });
-            res.send(tpl);
-        }).catch(function (error) {//catch all any possible errors
-            fs.readFile(`billing/error.html`).then(function (exists) {
-                var file = exists.toString('utf-8');
-                var tpl = handlebars.compile(file)(error);
-                res.set({
-                    //'ETag': hash,
-                    'Cache-Control': 'public, no-cache'
-                });
-                res.send(tpl);
-            })
-
-
-        });
-    });
-    api.post('/ipay/card', function (req, res) {
-        var formdata = req.body;
-        var url = '/payments/v2/transact/cc', paymentstatus;
-        var ipaystring = bill.ipaycard(formdata), headers = {}, success;
-        requester.ipayresttest(ipaystring, url).then(function (data) {
-            console.log(data);
-            if (data.status !== undefined) {
-                paymentstatus = bill.ipn(data.status) //returns true or 'status like less, failed, used if not successful'
-                console.log(paymentstatus + "payment status")
-                if (paymentstatus == true) { //if true trigger a call to the billing API
-                    console.log(paymentstatus + "payment status")
-                    var paystring = {};
-                    paystring.biller_name = data.p1;
-                    paystring.account = data.p2;
-                    paystring.phone = data.msisdn_idnum;
-                    paystring.amount = data.mc;
-                    paystring.vid = 'demo'
-                    var forpaystring = bill.paybill(paystring);
-                    console.log(forpaystring);
-                    return requester.$http(forpaystring, '/ipay-billing/sandbox/create', 'apis.ipayafrica.com', headers)
-
-                } else if (paymentstatus !== true) { //Else lenga story and display the transaction failed
-                    console.log(paymentstatus + "payment status")
-
-                    throw { error: { 'name': paymentstatus, 'text': "The transaction is " + paymentstatus + " Therefore the account has not been credited" } };
-                }//end of the nested if
-            } else {
-                throw { error: { 'name': '404', 'text': "Ipay did not return a response, try again" } };
-            }//end of the outer if
-
-        }).then(function (sucessdata) {//returned promise from requester.$http()
-            success = sucessdata.msg;
-            console.log("success Line 184:" + success)
-            return fs.readFile(`billing/complete.html`)
-        }).then(function (exists) {
-            var file = exists.toString('utf-8');
-            var tpl = handlebars.compile(file)(success);
-            res.set({
-                //'ETag': hash,
-                'Cache-Control': 'public, no-cache'
-            });
-            res.send(tpl);
-        }).catch(function (error) {//catch all any possible errors
-            fs.readFile(`billing/error.html`).then(function (exists) {
-                var file = exists.toString('utf-8');
-                var tpl = handlebars.compile(file)(error);
-                res.set({
-                    //'ETag': hash,
-                    'Cache-Control': 'public, no-cache'
-                });
-                res.send(tpl);
-            })
-
-
-        });
-        // res.status(200).send(ipaystring);
-    });
+    
     //export the api class/prototype to be used by express to route   
     return api;
 };

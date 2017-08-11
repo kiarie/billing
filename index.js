@@ -38,7 +38,7 @@ app.get('/partial/:name/:specname?', function (req, res) {
     subcategory = req.params.name; //e.g. Airtel, safaricom, zuku
   }
   console.log(req.xhr);
-  var compare = partial === 'contact' || partial === 'buy' || partial === 'home' || partial === 'payments';
+  var compare = partial === 'contact' || partial === 'buy' || partial === 'home' || partial === 'payments' || partial =='callback';
 
   if (compare) {
     files = fs.readFile(`billing/${partial}.html`);
