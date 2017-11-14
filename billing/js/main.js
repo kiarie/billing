@@ -41,13 +41,7 @@
 				elem.style.height = ""+window.innerHeight+"px";
 			});
 			};
-		} 
-		// if(!isMobile.any()) {
-		// 	$('.js-fullheight').css('height', $(window).height());
-		// 	$(window).resize(function(){
-		// 		$('.js-fullheight').css('height', $(window).height());
-		// 	});
-		// }
+		}
 		if(!isMobile.supported_browsers()) {
 			alert('Please Use a Supported Browser')
 		}
@@ -55,7 +49,9 @@
 	};
 
 	var sliderMain = function() {
+		var foo = document.querySelector('#fh5co-hero .flexslider .slides');
 		
+
 	  	$('#fh5co-hero .flexslider').flexslider({
 			animation: "fade",
 			slideshowSpeed: 5000,
@@ -109,20 +105,7 @@
 			if(evt.target !== container && evt.target !== container.querySelector('i')){
 				restructure()
 				}//endif
-		});	
-		// $(document).click(function (e) {
-	    // var container = $("#fh5co-offcanvas, .js-fh5co-nav-toggle");
-	    // if (!container.is(e.target) && container.has(e.target).length === 0) {
-
-	    // 	if ( $('body').hasClass('offcanvas-visible') ) {
-
-    	// 		$('body').removeClass('offcanvas-visible');
-    	// 		$('.js-fh5co-nav-toggle').removeClass('active');
-				
-	    // 	}
-	    // }
-		// });
-
+		});
 	};
     var _$ = function(elem){
         return document.createElement(elem);
@@ -244,7 +227,6 @@
 		window.addEventListener('load', function() {
 			navigator.serviceWorker.register('../serviceworker.js').then(function(registration) {
 			// Registration was successful
-			console.log(registration)
 			console.log('ServiceWorker registration successful with scope: ', registration.scope);
 			}, function(err) {
 			// registration failed :(

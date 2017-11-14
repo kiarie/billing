@@ -61,18 +61,9 @@ module.exports = function (express) {
     api.post('/ipay', function (req, res) {//this rout returns the payment interface of ipay...
         var formdata = JSON.stringify(req.body);
         var url = 'https://payments.ipayafrica.com/v3/ke?';
-        var file;
-        fs.readFile(`billing/pay.html`).then(function (exists) {
-            file = exists.toString('utf-8');
-            return file;
-        }).then(function (file) { //insert into db first
-            var config = (req.hostname == 'localhost')? db.configs.local : db.configs.online;
-            var con = db.connection(config);
-            return db.insertquery(con, JSON.parse(formdata));
-        }, function (err) {
-            console.log(err);
-            throw { 'error': { name: 'A Database Error', text: err.message } };
-        }).then(function (id) {  //take note from here we will reuse for reload of page on fail
+        var config = (req.hostname == 'localhost')? db.configs.local : db.configs.online;
+        var con = db.connection(config);
+        return db.insertquery(con, JSON.parse(formdata)).then(function (id) {  //take note from here we will reuse for reload of page on fail
             var host = req.headers.referer,
                 ipaystring = bill.webpay(JSON.parse(formdata), id, host),
                 querystr = querystring.stringify(ipaystring);
@@ -81,8 +72,9 @@ module.exports = function (express) {
         }).catch(function (error) {
             console.log(error)
             var exists = fs.readFileSync(`billing/error.html`)
-            var file = exists.toString('utf-8');
-            var tpl = handlebars.compile(file)(error);
+            var file = exists.toString('utf-8'),
+            err = { 'error': { name: 'A Database Error', text: err.message } };
+            var tpl = handlebars.compile(file)(err);
             res.set({
                 //'ETag': hash,
                 'Cache-Control': 'public, no-cache'

@@ -43,48 +43,6 @@ module.exports ={
       qrstring.hsh = hashid;
       return qrstring;
     },
-    restpay: function(data, id){
-      var start = new Date().getTime();
-     //assign other parameters that iPay needs to the data object in this manner
-    //  console.log(id);
-      data.live = '1';
-      data.oid = id;                                             
-      data.inv = id+data.account; 
-      data.vid = VENDOR_ID;
-      data.curr = 'KES';
-      data.p1 = data.biller;
-      data.p2 = data.account;
-      data.p3 = data.category;
-      data.p4 = data.amount;
-      data.cbk = 'localhost:3000/';
-      data.cst = '1';
-      data.crl = '2';
-      var hash = require('./hash.js'); //generate hash
-      delete data.account;
-      delete data.category;
-      delete data.biller;
-      var key = HASH_KEY;
-                 //    data.live+data.oid+data.inv+data.amount+data.tel+data.eml+data.vid+data.curr+data.p1+data.p2+data.p3+data.p4+data.cst+data.cbk;  
-      var datastring = data.live+data.oid+data.inv+data.amount+data.tel+data.eml+data.vid+data.curr+data.p1+data.p2+data.p3+data.p4+data.cst+data.cbk;
-      var hashid = hash.hash_hmac(datastring, 'sha256', key);
-      data.hash = hashid;
-      return data;
-    },
-    ipaymobile: function(data){
-       //generate hash
-      var key = HASH_KEY;
-      var datastring = data.sid+data.vid;
-      var hashid = hash.hash_hmac(datastring, 'sha256', key);
-      data.hash = hashid;
-      return data;
-    },
-    ipaycard: function(data, biller){
-      var key = HASH_KEY;
-      var datastring = data.sid+data.vid+data.cardno+data.cvv+data.month+data.year+data.cust_address+data.cust_city+data.cust_country+data.cust_postcode+data.cust_stateprov+data.fname+data.lname;
-      var hashid = hash.hash_hmac(datastring, 'sha256', key);
-      data.hash = hashid;
-      return data;
-    },
     ipn:function (status) {
         var stat;
             switch (status) {
