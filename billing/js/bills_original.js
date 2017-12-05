@@ -131,7 +131,7 @@ function _getAjx(pathname) {
  * @func _post
  * My own custom post ajax functions that returns a promise
  * simple enough but works \^^/ 
- *  */
+ */
 function _post(pathname, formdata) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
