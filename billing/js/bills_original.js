@@ -360,7 +360,7 @@ function formvalid(evt) {
 function validation(evt) {
     var e = evt.target,
         formgroup = e.parentElement.parentElement,
-        mobileProviders = ['airtel', 'safaricom', 'orange'];
+        mobileProviders = ['airtel', 'safaricom', 'telkom'];
     switch (e.name) {
         case 'tel':
             if (isNaN(e.value) || e.value.length < 12 || e.value.length > 12 || e.value == "" || e.value.substring(0, 3) !== "254") {
