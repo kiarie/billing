@@ -1,4 +1,4 @@
-var VERSION = '1.1.0';/** bump up this to refresh cache */
+var VERSION = '1.2.1.1';/** bump up this to refresh cache */
 var CACHE_NAME = 'billing-static-cache';
 var CACHE_DYNAMIC = "billing-dynamic-cache-" + VERSION;
 var urls = [
@@ -41,7 +41,7 @@ self.addEventListener('install', function (event) {
         caches.open(CACHE_NAME).then(function (cache) {
             console.log('opened cache');
             return cache.addAll(urls);
-        })
+        }).then(function(){return self.skipWaiting()})
     );
 });
 self.addEventListener('fetch', function (event) {
