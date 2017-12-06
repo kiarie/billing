@@ -1,5 +1,5 @@
 var VERSION = '1.2.1.1';/** bump up this to refresh cache */
-var CACHE_NAME = 'billing-static-cache';
+var CACHE_NAME = 'billing-static-cache'+VERSION;
 var CACHE_DYNAMIC = "billing-dynamic-cache-" + VERSION;
 var urls = [
     '/',
@@ -54,11 +54,9 @@ self.addEventListener('fetch', function (event) {
         event.respondWith(
             caches.match(event.request)
                 .then(function (response) {
-                    console.log('opened cache');
                     if (response) {
                         return response;
                     }
-                    console.log('bypassed cache');
                     var fetchrequest = event.request.clone();
 
                     return fetch(fetchrequest, { credentials: 'include' }).then(function (response) {

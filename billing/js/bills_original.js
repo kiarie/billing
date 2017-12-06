@@ -23,6 +23,7 @@ function load() {
             elem.innerHTML = html;
             // //console.log(html);
         });
+        offcanvasMenu();
         getLinks();
         // listings();
 
@@ -64,14 +65,14 @@ function _get(pathname, callback) {
         showform();//list the billing options available
     }
     xhr.onreadystatechange = function () {
-        var loader = document.createElement('div');
+        var loader = _$('div');
         if (xhr.readyState == 1) {
             loader.id = "loader";
             loader.style.position = "fixed";
             loader.style.zIndex = "1000";
             loader.style.top = "44%";
             loader.style.left = "48%";
-            var loadWrap = document.createElement('div');
+            var loadWrap = _$('div');
             loadWrap.classList.add("spinner");
             loader.appendChild(loadWrap);
             document.body.appendChild(loader);
@@ -104,14 +105,14 @@ function _getAjx(pathname) {
             }
         }
         xhr.onreadystatechange = function () {
-            var loader = document.createElement('div');
+            var loader = _$('div');
             if (xhr.readyState == 1) {
                 loader.id = "loader";
                 loader.style.position = "fixed";
                 loader.style.zIndex = "1000";
                 loader.style.top = "44%";
                 loader.style.left = "48%";
-                var loadWrap = document.createElement('div');
+                var loadWrap = _$('div');
                 loadWrap.classList.add("spinner");
                 loader.appendChild(loadWrap);
                 document.body.appendChild(loader);
@@ -155,40 +156,28 @@ function getLinks() {
         link.addEventListener('click', ajx);
     });
 }
-/**
- * List Cards of the Categories e.g Airtime, Electricity
- * it gets the anchors in the top header and then copies the getLinks
- * to this cards
- */
-// function listings(){
-// 		var category_list = document.querySelector('#best-deal .row');
-// 		Array.from(document.querySelectorAll('#fh5co-offcanvas ul li a')).map(function(li){
-// 			if(li.href.substr(-8)!== '#contact' && li.href.substr(0,3) !=='tel' ){
+var _$ = function(elem){
+    return document.createElement(elem);
+}
+//this clones the links for use in mobile view
+var offcanvasMenu = function() {
+    var elem = _$('div');//create Div element
+    elem.id = "fh5co-offcanvas"; //Add an id attribute to it
+    document.body.insertBefore(elem, null); //insert in the document body before all else
+    var a = _$('a'); //create an anchor tag
+    a.classList.add("js-fh5co-nav-toggle"); //add a class to it
+    a.classList.add("fh5co-nav-toggle");
+    a.appendChild(_$('i'));		//add that created i tag element this is the open and close icon the three bars
 
-// 				var listing = document.createElement('div'),
-//                     img = document.createElement('img')
-//                 img.src = 'images/billing_images/'+li.href.split('#')[1]+'.png';
-//                 img.maxHeight = '240';
-
-//                 addClass(img, 'img-responsive')
-// 				addclasses(listing, "col-md-4 item-block animated fadeInUp");
-// 				 var blockquote  = document.createElement('div');
-// 				 addClass(blockquote, "fh5co-property")
-//                	var figure = document.createElement('figure');
-// 					figure.appendChild(img);
-//                     figure.style.backgroundImage = 'url(images/slide_2.jpg)';
-// 				var inner = document.createElement('div');
-//                     addClass(inner, 'fh5co-property-innter')
-//                     theTpl = '<h2>'+li.innerHTML+'</h2><a href="'+li.href+'">'+li.innerHTML+'</a>'
-//                     inner.innerHTML = theTpl;
-// 					blockquote.appendChild(figure);
-// 					blockquote.appendChild(inner);
-
-//                     listing.appendChild(blockquote)
-// 				category_list.appendChild(listing)
-// 				}
-// 		})
-// 	}
+    document.body.insertBefore(a, null);//insert it to DOM	
+    var home = _$('div')
+    home.classList.add("side-nav-header");
+    home.appendChild(document.querySelector('.header-inner a').cloneNode(true));
+    document.querySelector('#fh5co-offcanvas').appendChild(home)
+    document.querySelector('#fh5co-offcanvas').
+    appendChild(document.querySelector('#fh5co-header nav').cloneNode(true));
+    
+};
 /**
  * @func _onChange
  * function to enact change of content in the Page: essentially navigation
@@ -231,13 +220,13 @@ function _loading() {
             btn.disabled = true;
             // console.log(btn)
         });
-        var loader = document.createElement('div');
+        var loader = _$('div');
         loader.id = "loader";
         loader.style.position = "fixed";
         loader.style.zIndex = "1000";
         loader.style.top = "44%";
         loader.style.left = "48%";
-        var loadWrap = document.createElement('div');
+        var loadWrap = _$('div');
         loadWrap.classList.add("spinner");
         loader.appendChild(loadWrap);
         document.body.appendChild(loader);
@@ -428,18 +417,18 @@ function showAlert(content, header) {
     if (content.text !== undefined) contents = content.text;
     if (content.ipay_reference !== undefined) {
         reference = document.createTextNode('Reference: ' + content.ipay_reference);
-        var Ref = document.createElement('h4');
+        var Ref = _$('h4');
         Ref.appendChild(reference);
         elem.appendChild(Ref);
     }
     //----------- the Header -------------------------//
-    var headers = document.createElement('h4');
+    var headers = _$('h4');
     addClass(headers, 'text-' + content.status)
     var header_content = document.createTextNode(header);
     headers.appendChild(header_content);
     //----------- the Content--------------------------//
     var text = document.createTextNode(contents)
-    var p = document.createElement('span');
+    var p = _$('span');
     addClass(p, 'text-' + content.status)
     p.appendChild(text);
     addClass(closebtn, 'btn-' + content.status)
@@ -485,7 +474,7 @@ function dismissAlert(elem) {
  */
 function setValidity(text, formgroup) {
     if (text !== "" && formgroup.querySelector('.help-block') === null) {
-        var helptext = document.createElement('span');
+        var helptext = _$('span');
         addClass(helptext, 'help-block');
         addClass(helptext, 'col-md-offset-4');
         var innetext = document.createTextNode(text);
