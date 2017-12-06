@@ -5,25 +5,22 @@ var addclasses = function (elem, classes) {
         elem.classList.add(cl);
     })
 }
-function load() {
+function initial_load() {
     var source = document.getElementById("entry-template").innerHTML;
     var template = Handlebars.compile(source);
-    var compileto = document.querySelectorAll('.channels');
     /*there are two DOM elements with this links so select all
      inorder to iterate with them all running the reqiured functions on them
    */
-
+  console.log('load Called')
     _getAjx('/list').then(function (data) {
         var rdata = JSON.parse(data);
         var context = { items: rdata };
         var html = template(context);
         //console.log(context);
         //iterate through the elem and apply function to each element.
-        Array.from(compileto).map(function (elem) {
+        Array.from(document.querySelectorAll('.channels')).map(function (elem) {
             elem.innerHTML = html;
-            // //console.log(html);
         });
-        offcanvasMenu();
         getLinks();
         // listings();
 
@@ -159,25 +156,6 @@ function getLinks() {
 var _$ = function(elem){
     return document.createElement(elem);
 }
-//this clones the links for use in mobile view
-var offcanvasMenu = function() {
-    var elem = _$('div');//create Div element
-    elem.id = "fh5co-offcanvas"; //Add an id attribute to it
-    document.body.insertBefore(elem, null); //insert in the document body before all else
-    var a = _$('a'); //create an anchor tag
-    a.classList.add("js-fh5co-nav-toggle"); //add a class to it
-    a.classList.add("fh5co-nav-toggle");
-    a.appendChild(_$('i'));		//add that created i tag element this is the open and close icon the three bars
-
-    document.body.insertBefore(a, null);//insert it to DOM	
-    var home = _$('div')
-    home.classList.add("side-nav-header");
-    home.appendChild(document.querySelector('.header-inner a').cloneNode(true));
-    document.querySelector('#fh5co-offcanvas').appendChild(home)
-    document.querySelector('#fh5co-offcanvas').
-    appendChild(document.querySelector('#fh5co-header nav').cloneNode(true));
-    
-};
 /**
  * @func _onChange
  * function to enact change of content in the Page: essentially navigation
@@ -485,9 +463,9 @@ function setValidity(text, formgroup) {
     }
 }
 //atob(location.search.split('&')[1].split('=')[1])
-window.addEventListener('DOMContentLoaded', _onChange);
-window.addEventListener('DOMContentLoaded', load);//when initial DOM is loaded useful!!
-window.addEventListener('DOMContentLoaded', getLinks);//when initial DOM is loaded
+window.addEventListener('load', _onChange);
+window.addEventListener('load', initial_load);//when initial DOM is loaded useful!!
+window.addEventListener('load', getLinks);//when initial DOM is loaded
 window.addEventListener('hashchange', _onChange);//when the hash changes
 window.addEventListener('load', _onalert);
 document.addEventListener('readystatechange', _loading)

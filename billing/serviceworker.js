@@ -1,4 +1,4 @@
-var VERSION = '1.2.1.1';/** bump up this to refresh cache */
+var VERSION = '1.2.1.4';/** bump up this to refresh cache */
 var CACHE_NAME = 'billing-static-cache'+VERSION;
 var CACHE_DYNAMIC = "billing-dynamic-cache-" + VERSION;
 var urls = [

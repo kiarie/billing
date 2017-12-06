@@ -4,7 +4,7 @@ var config = {
 	
    output: {
       path:'/var/www/billing/billing/js',
-      filename: './billing/js/bundle.js',
+      filename: './bundle.js',
    },
 //    plugins: [ new UglifyJSPlugin()],
    devServer: {
