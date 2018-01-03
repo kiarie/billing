@@ -1,8 +1,8 @@
 var requester = require('./requester.js');
 var hash = require('./hash.js');
 var querystring = require('querystring');
-const VENDOR_ID = 'ipaybilling';
-const HASH_KEY = '&*etrs#21)o!';//&*etrs#21)o!
+const VENDOR_ID = 'APP_ID';
+const HASH_KEY = 'APP_KEY';
 
 module.exports ={
     vendor_id:VENDOR_ID,//exporting the vendor Id also
@@ -69,19 +69,5 @@ module.exports ={
                     break;
             }
             return stat;
-    },
-    pusher: function () {
-        var Pusher = require('pusher');
-
-        var pusher = new Pusher({
-        appId: '289805',
-        key: '7f15e1e5c14e3e3db3fd',
-        secret: '9d674ec9b59acc274a6a',
-        encrypted: true
-        });
-
-        pusher.trigger('my-channel', 'my-event', {
-        "message": "hello world"
-        });
     }
 };
