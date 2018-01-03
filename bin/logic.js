@@ -3,13 +3,6 @@ const mysql = require('mysql');
 
 module.exports = {
     configs:{
-        online:{
-            host:"46.101.144.56",
-            port: 5056,
-            user:"micstation",
-            password: "52783970",
-            database : 'micstation_billing'
-              },
         local:{
              host:"localhost",
              user:"root",
