@@ -5,7 +5,7 @@ var options = function(routepath){
         host:'api.ipayafrica.com',
         path:routepath,
         headers: {
-        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOlsiYXBpLmlwYXlhZnJpY2EuY29tIl0sImp0aSI6NTExODk2MjAxLCJpYXQiOjE0Njg5OTgwMzAsIm5iZiI6MTQ2ODk5ODMzMCwiZXhwIjoxNzI4MTk4MDMwLCJkYXRhIjp7InNjb3BlIjoiYWxsIiwiYWdlbnQiOiJCSUxMSU5HIn19.x7CKICoZ8AbQw0fP9PrAV9rqQaQKOMotCwcGWHTVeIo'
+        'authorization': 'Bearer SOME_KEY'
         }
     };
 };
@@ -15,7 +15,7 @@ var post_options = function(routepath, postData){
         host:'api.ipayafrica.com',
         path:routepath,
         headers: {
-        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOlsiYXBpLmlwYXlhZnJpY2EuY29tIl0sImp0aSI6NTExODk2MjAxLCJpYXQiOjE0Njg5OTgwMzAsIm5iZiI6MTQ2ODk5ODMzMCwiZXhwIjoxNzI4MTk4MDMwLCJkYXRhIjp7InNjb3BlIjoiYWxsIiwiYWdlbnQiOiJCSUxMSU5HIn19.x7CKICoZ8AbQw0fP9PrAV9rqQaQKOMotCwcGWHTVeIo',
+        'authorization': 'Bearer SOME_KEY',
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': Buffer.byteLength(postData)
         }
@@ -142,7 +142,7 @@ module.exports = {
     },
      $http:function(fdata, url, host, headers){
         var formdata = querystring.stringify(fdata);
-        headers['authorization']= 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOlsiYXBpLmlwYXlhZnJpY2EuY29tIl0sImp0aSI6NTExODk2MjAxLCJpYXQiOjE0Njg5OTgwMzAsIm5iZiI6MTQ2ODk5ODMzMCwiZXhwIjoxNzI4MTk4MDMwLCJkYXRhIjp7InNjb3BlIjoiYWxsIiwiYWdlbnQiOiJCSUxMSU5HIn19.x7CKICoZ8AbQw0fP9PrAV9rqQaQKOMotCwcGWHTVeIo';
+        headers['authorization']= 'Bearer SOME_KEY';
         headers['Content-Type'] = 'application/x-www-form-urlencoded';
         headers['Content-Length']= Buffer.byteLength(formdata);
         return new Promise(function (resolve, reject) {

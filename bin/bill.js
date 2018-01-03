@@ -14,7 +14,7 @@ module.exports ={
         Object.keys(data).sort().map((k) =>{
             datastring[k] = data[k]; 
         });
-        var key = HASH_KEY;//&*etrs#21)o!      
+        var key = HASH_KEY;    
         data.hash = hash.hash_hmac(querystring.stringify(datastring), 'sha256', key);
         return data;         
     },
