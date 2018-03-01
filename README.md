@@ -1,7 +1,7 @@
 # Billing iPayAfrica PWA!
 billing platform for iPay as a PWA 
 
-[[Billing PWA]:http://billing.ipayafrica.com
+[Billing PWA](http://billing.ipayafrica.com)
 
 > This is a PWA(Progressive WebAPP) with Service worker support, http/2, serve-side rendering the whole thing!
 Features:
